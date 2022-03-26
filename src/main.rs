@@ -1,8 +1,12 @@
 use std::{env, fs, process, io};
 use std::io::Write;
 use exitcode;
+use std::sync::Mutex;
+use once_cell::sync::Lazy;
+
+static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> =  Lazy::new(|| {Mutex::new(false)});
+
 fn main() {
-    println!("Coke 0.1.0");
     let args: Vec<String> = env::args().collect();
     if args.len() > 2 {
         print!("Usage: Coke [script]");
@@ -26,17 +30,39 @@ fn run_from_file(file_name: &str) {
 fn run_prompt() {
     let mut buffer = String::new();
     let stdin = io::stdin();
+    println!("Interactive Coke 0.1.0");
     loop {
-        print!("Coke => ");
+        print!("icoke> ");
         io::stdout().flush().unwrap();
         match stdin.read_line(&mut buffer) {
-            Ok(_source) => 
-            println!("{:?}", buffer.trim_end()),
+            Ok(_source) => {
+                if buffer.trim_end().is_empty() {
+                    break;
+                } 
+                run(String::from(buffer.trim_end()));
+                *HAD_ERROR_MUTEX.lock().unwrap() = false;
+            }
             Err(error) => println!("Error due to {error:?}")
         }
     }
 }
 
 fn run(coke_source: String) {
-
+    // Give the source to scanner module's scan function
+    // It returns a list of Tokens
+    // We will print the tokens
+    if *HAD_ERROR_MUTEX.lock().unwrap() {
+        process::exit(exitcode::DATAERR);
+    }
 }
+
+fn report(line: i32, at: &str, message: &str) {
+    let err = format!("[line {} ] Error {} : {}", line, at, message);
+    *HAD_ERROR_MUTEX.lock().unwrap() = true;
+}
+
+fn error(line: i32, message: &str) {
+    report(line, "", message)
+}
+
+
