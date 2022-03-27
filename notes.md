@@ -20,3 +20,13 @@ std::io.Write::stdin().readLine(&mut buffer)
 Right now we need a thread safe global variable for HAD_ERROR_MUTEX.
 We can have a Mutex<bool> type var, but it can't be used for a static variable.
 So we use Lazy initialization too using once_cell
+
+## 2022-03-27 17:57:22
+
+Lexemes - group of characters that makes sense in our lang
+```
+let language = "lox"
+```
+ex `let` makes sense, but `gua` doesn't
+
+How lexemes makes sense?. if they come under a `TokenType`. 

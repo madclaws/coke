@@ -4,6 +4,8 @@ use exitcode;
 use std::sync::Mutex;
 use once_cell::sync::Lazy;
 
+mod token_type;
+
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> =  Lazy::new(|| {Mutex::new(false)});
 
 fn main() {
@@ -59,6 +61,7 @@ fn run(coke_source: String) {
 fn report(line: i32, at: &str, message: &str) {
     let err = format!("[line {} ] Error {} : {}", line, at, message);
     *HAD_ERROR_MUTEX.lock().unwrap() = true;
+    println!("{err}");
 }
 
 fn error(line: i32, message: &str) {
