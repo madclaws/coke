@@ -1,17 +1,18 @@
-use std::{env, fs, process, io};
-use std::io::Write;
 use exitcode;
-use std::sync::Mutex;
 use once_cell::sync::Lazy;
+use std::io::Write;
+use std::sync::Mutex;
+use std::{env, fs, io, process};
 
+mod token;
 mod token_type;
 
-static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> =  Lazy::new(|| {Mutex::new(false)});
+static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() > 2 {
-        print!("Usage: Coke [script]");
+        print!("Usage: Coke [script]\n");
         process::exit(exitcode::USAGE);
     } else if args.len() == 2 {
         // run from the source file
@@ -24,7 +25,8 @@ fn main() {
 
 /// Load the file into the memory and run it
 fn run_from_file(file_name: &str) {
-    let coke_source: String  = fs::read_to_string(file_name).expect("Unable to load the Coke source file");
+    let coke_source: String =
+        fs::read_to_string(file_name).expect("Unable to load the Coke source file");
     run(coke_source);
 }
 
@@ -40,16 +42,16 @@ fn run_prompt() {
             Ok(_source) => {
                 if buffer.trim_end().is_empty() {
                     break;
-                } 
+                }
                 run(String::from(buffer.trim_end()));
                 *HAD_ERROR_MUTEX.lock().unwrap() = false;
             }
-            Err(error) => println!("Error due to {error:?}")
+            Err(error) => println!("Error due to {error:?}"),
         }
     }
 }
 
-fn run(coke_source: String) {
+fn run(_coke_source: String) {
     // Give the source to scanner module's scan function
     // It returns a list of Tokens
     // We will print the tokens
@@ -64,8 +66,7 @@ fn report(line: i32, at: &str, message: &str) {
     println!("{err}");
 }
 
+#[allow(dead_code)]
 fn error(line: i32, message: &str) {
     report(line, "", message)
 }
-
-

@@ -30,3 +30,29 @@ let language = "lox"
 ex `let` makes sense, but `gua` doesn't
 
 How lexemes makes sense?. if they come under a `TokenType`. 
+
+## 2022-04-01 21:39:41
+### Where are we?
+- We defined tokenTypes as an Enum
+
+Token struct
+    - TokenType
+    - lexeme (string)
+    - line - line no in u32
+    - literal, this is an `Object` in Java, will figure this out later
+        - This is basically a runtime version of the literal token such as number/string, runtime version means if a literal is "4" as a lexeme, then we can convert to an integer 4.
+
+```
+`token_type::TokenType` doesn't implement `std::fmt::Display`
+
+Can use #[derive(Debug)] to print enums
+```
+
+- `#[allow(dead_code)]` for turning of unused code warning
+
+Things done,
+    - Token module and struct
+    - new and to_string functions in Token struct.
+
+
+

@@ -1,5 +1,6 @@
 /// Defining TokenType Enum
-
+#[derive(Debug)]
+#[allow(dead_code)]
 pub enum TokenType {
     // Single character tokens
     LeftParen,
@@ -37,11 +38,11 @@ pub enum TokenType {
     Super,
     This,
     True,
-    Var,
+    Let,
     While,
     // Literals - Unreserved lexemes, lexems that represent values
     Identifier,
     String,
     Number,
-    Eof
+    Eof,
 }
