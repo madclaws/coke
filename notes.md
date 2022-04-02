@@ -54,5 +54,19 @@ Things done,
     - Token module and struct
     - new and to_string functions in Token struct.
 
+## 2022-04-03 01:35:49
 
+Lexical grammar - Rules that groups character to a lexeme..
 
+Scanner module
+- Consistes of source (String) and list of Tokens
+- Scanner loop - iterates over the source and add tokens to list.
+    start - start pos of lexeme
+    current - current pos of lexeme
+    line = current line no (for error reporting)
+    loop ends when current > length of source. 
+- We add an EOF token at the end of token list.
+
+Today - Basic Scanner Module Done.
+
+Coming up - [Recogonizing Lexemes](http://www.craftinginterpreters.com/scanning.html#recognizing-lexemes)

@@ -6,6 +6,7 @@ use std::{env, fs, io, process};
 
 mod token;
 mod token_type;
+mod scanner;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
