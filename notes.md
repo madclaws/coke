@@ -70,3 +70,10 @@ Scanner module
 Today - Basic Scanner Module Done.
 
 Coming up - [Recogonizing Lexemes](http://www.craftinginterpreters.com/scanning.html#recognizing-lexemes)
+
+## 2022-04-04 02:19:39
+
+- Scanning single character tokens and adding it to the token list.
+- **We are not handling, the lexemes that doesnt have a token type**
+
+Coming up - [Lexical errors](http://www.craftinginterpreters.com/scanning.html#lexical-errors)
