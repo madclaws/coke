@@ -2,9 +2,10 @@
 use crate::token_type::*;
 
 #[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub struct Token {
-    token_type: TokenType,
-    lexeme: String,
+    pub token_type: TokenType,
+    pub lexeme: String,
     literal: String, // We will change the datatype to different latet
     line: u32,
 }

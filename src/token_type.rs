@@ -1,5 +1,5 @@
 /// Defining TokenType Enum
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 #[allow(dead_code)]
 pub enum TokenType {
     // Single character tokens
