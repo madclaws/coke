@@ -14,7 +14,7 @@ impl Scanner {
         Scanner{source, tokens: Vec::new()}
     }
 
-    pub fn scanTokens(mut self) -> Vec<Token> {
+    pub fn scan_tokens(mut self) -> Vec<Token> {
         let mut current: u32 = 0; // current index of lexeme
         let line: u32 = 1;
 
@@ -25,8 +25,10 @@ impl Scanner {
             let source_char = self.source.get(current as usize .. current as usize).unwrap();
             if let Some(token) = scan_token(source_char) {
                 self.add_token(token, String::from(""), start, current, line);
+            } else {
+                crate::error(line as i32, "Unexpected error");
             }
-            current += current;
+            current += 1;
         }
 
         // Its null for literal in below EOF token in book.

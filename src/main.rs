@@ -68,6 +68,6 @@ fn report(line: i32, at: &str, message: &str) {
 }
 
 #[allow(dead_code)]
-fn error(line: i32, message: &str) {
+pub fn error(line: i32, message: &str) {
     report(line, "", message)
 }

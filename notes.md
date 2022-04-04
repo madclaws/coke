@@ -77,3 +77,9 @@ Coming up - [Recogonizing Lexemes](http://www.craftinginterpreters.com/scanning.
 - **We are not handling, the lexemes that doesnt have a token type**
 
 Coming up - [Lexical errors](http://www.craftinginterpreters.com/scanning.html#lexical-errors)
+
+## 2022-04-05 02:11:54
+
+Calling pub function of `main.rs` from other modules?
+
+- Use `crate::function_name`
