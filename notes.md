@@ -83,3 +83,7 @@ Coming up - [Lexical errors](http://www.craftinginterpreters.com/scanning.html#l
 Calling pub function of `main.rs` from other modules?
 
 - Use `crate::function_name`
+
+- Basic Test cases for scanner - Done
+
+Coming up - [Operators](http://www.craftinginterpreters.com/scanning.html#operators)
