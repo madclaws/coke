@@ -4,9 +4,9 @@ use std::io::Write;
 use std::sync::Mutex;
 use std::{env, fs, io, process};
 
+mod scanner;
 mod token;
 mod token_type;
-mod scanner;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 

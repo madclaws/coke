@@ -20,7 +20,7 @@ pub enum TokenType {
     Equal,
     EqualEqual,
     Greater,
-    GreaterGreater,
+    GreaterEqual,
     Less,
     LessEqual,
     // Keywords - These are reserved lexemes of language

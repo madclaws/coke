@@ -87,3 +87,15 @@ Calling pub function of `main.rs` from other modules?
 - Basic Test cases for scanner - Done
 
 Coming up - [Operators](http://www.craftinginterpreters.com/scanning.html#operators)
+
+## 2022-04-05 20:00:07
+
+Handling more than one character lexemes
+ex: if we get `!`, then we check the next character is `=`, if yes, then
+inc the current and token will be `BangEqual`.
+
+## 2022-04-06 02:31:07
+
+- Added scanner for more than 1 character lexeme.
+
+Coming up - [Longer Lexemes](http://www.craftinginterpreters.com/scanning.html#longer-lexemes)
