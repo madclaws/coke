@@ -46,5 +46,7 @@ pub enum TokenType {
     Number,
     Eof,
     // Special token for comment
-    Comment
+    Comment,
+    // For Ignored characters
+    Ignored,
 }

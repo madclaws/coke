@@ -105,3 +105,10 @@ Coming up - [Longer Lexemes](http://www.craftinginterpreters.com/scanning.html#l
 Added scanner for `/` and `//`
 
 - Todo next - Add test for `/` and `//`
+
+## 2022-04-07 21:19:17
+
+- Test for longer lexeme - done
+- Handle whitespace characters
+
+Coming upp - [String Literals](http://www.craftinginterpreters.com/scanning.html#string-literals)
