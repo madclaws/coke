@@ -45,4 +45,6 @@ pub enum TokenType {
     String,
     Number,
     Eof,
+    // Special token for comment
+    Comment
 }

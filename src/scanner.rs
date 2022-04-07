@@ -27,13 +27,20 @@ impl Scanner {
         self.current = 0; // current index of lexeme
         self.line = 1;
         println!("SOURCE\n{}", self.source);
-        while self.current < self.source.len() as u32 {
+        while self.is_at_end() {
             // Scan a single token
             // start and current is used for taking the lexeme out of source (substring from the source with start and length maybe)
             self.start = self.current;
 
             if let Some(token) = self.scan_token() {
-                self.add_token(token, String::from(""));
+                if token == TokenType::Comment {
+                    // If token is comment, then we consume till the end of line
+                    while !self.is_at_end() && self.peek_next() != "\n" {
+                        self.current += 1;
+                    }
+                } else {
+                    self.add_token(token, String::from(""));
+                }
             } else {
                 crate::error(self.line as i32, "Unexpected error");
             }
@@ -86,34 +93,45 @@ impl Scanner {
                 } else {
                     Some(TokenType::Bang)
                 }
-            }
+            },
             "=" => {
                 if self.is_next("=") {
                     Some(TokenType::EqualEqual)
                 } else {
                     Some(TokenType::Equal)
                 }
-            }
+            },
             ">" => {
                 if self.is_next("=") {
                     Some(TokenType::GreaterEqual)
                 } else {
                     Some(TokenType::Greater)
                 }
-            }
+            },
             "<" => {
                 if self.is_next("=") {
                     Some(TokenType::LessEqual)
                 } else {
                     Some(TokenType::Less)
                 }
+            },
+            "/" => {
+                if self.is_next("/") {
+                    Some(TokenType::Comment)
+                } else {
+                    Some(TokenType::Slash)
+                }
             }
             _ => None,
         }
     }
 
+    fn is_at_end(&self) -> bool {
+        self.current < self.source.len() as u32
+    }
+
     fn is_next(&mut self, expected: &str) -> bool {
-        if self.current < self.source.len() as u32 {
+        if self.is_at_end() {
             if self
                 .source
                 .get(self.current as usize..(self.current + 1) as usize)
@@ -126,6 +144,10 @@ impl Scanner {
             return false;
         }
         return false;
+    }
+
+    fn peek_next(&self) -> &str {
+        self.source.get(self.current as usize..(self.current + 1) as usize).unwrap()
     }
 }
 

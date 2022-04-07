@@ -99,3 +99,9 @@ inc the current and token will be `BangEqual`.
 - Added scanner for more than 1 character lexeme.
 
 Coming up - [Longer Lexemes](http://www.craftinginterpreters.com/scanning.html#longer-lexemes)
+
+## 2022-04-07 11:18:33
+
+Added scanner for `/` and `//`
+
+- Todo next - Add test for `/` and `//`
