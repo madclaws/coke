@@ -34,12 +34,28 @@ impl Scanner {
 
             if let Some(token) = self.scan_token() {
                 if token == TokenType::Comment {
-                    println!("{token:?}");
                     // If token is comment, then we consume till the end of line
-                    while !self.is_at_end() && self.peek_next() != "\n" {
+                    while !self.is_at_end() && self.peek_next() != '\n' {
                         self.current += 1;
                     }
-                } else if token == TokenType::Ignored {
+                } else if token == TokenType::String {
+                    while !self.is_at_end() && self.peek_next() != '"' {
+                        if self.peek_next() != '\n' {
+                            self.line += 1;
+                        }
+                        self.current += 1;
+                    }
+                    if self.is_at_end() {
+                        crate::error(self.line as i32, "Unterminated string");        
+                    }
+                    // consuming the last closing string
+                    self.current += 1;
+                    self.add_token(TokenType::String, self
+                        .source
+                        .get((self.start + 1) as usize..(self.current - 1) as usize)
+                        .unwrap().to_string());
+                } 
+                else if token == TokenType::Ignored {
                     continue;
                 } else {
                     self.add_token(token, String::from(""));
@@ -79,58 +95,61 @@ impl Scanner {
             .unwrap();
         // println!("source_char {}", source_char);
         self.current += 1;
-        match source_char {
-            "(" => Some(TokenType::LeftParen),
-            ")" => Some(TokenType::RightParen),
-            "{" => Some(TokenType::LeftBrace),
-            "}" => Some(TokenType::RightBrace),
-            "," => Some(TokenType::Comma),
-            "." => Some(TokenType::Dot),
-            ";" => Some(TokenType::SemiColon),
-            "-" => Some(TokenType::Minus),
-            "+" => Some(TokenType::Plus),
-            "*" => Some(TokenType::Star),
-            "!" => {
+        match source_char.chars().next().unwrap() {
+            '(' => Some(TokenType::LeftParen),
+            ')' => Some(TokenType::RightParen),
+            '{' => Some(TokenType::LeftBrace),
+            '}' => Some(TokenType::RightBrace),
+            ',' => Some(TokenType::Comma),
+            '.' => Some(TokenType::Dot),
+            ';' => Some(TokenType::SemiColon),
+            '-' => Some(TokenType::Minus),
+            '+' => Some(TokenType::Plus),
+            '*' => Some(TokenType::Star),
+            '!' => {
                 if self.is_next("=") {
                     Some(TokenType::BangEqual)
                 } else {
                     Some(TokenType::Bang)
                 }
             }
-            "=" => {
+            '=' => {
                 if self.is_next("=") {
                     Some(TokenType::EqualEqual)
                 } else {
                     Some(TokenType::Equal)
                 }
             }
-            ">" => {
+            '>' => {
                 if self.is_next("=") {
                     Some(TokenType::GreaterEqual)
                 } else {
                     Some(TokenType::Greater)
                 }
             }
-            "<" => {
+            '<' => {
                 if self.is_next("=") {
                     Some(TokenType::LessEqual)
                 } else {
                     Some(TokenType::Less)
                 }
             }
-            "/" => {
+            '/' => {
                 if self.is_next("/") {
                     Some(TokenType::Comment)
                 } else {
                     Some(TokenType::Slash)
                 }
             }
-            " " => Some(TokenType::Ignored),
-            "\r" => Some(TokenType::Ignored),
-            "\t" => Some(TokenType::Ignored),
-            "\n" => {
+            ' ' => Some(TokenType::Ignored),
+            '\r' => Some(TokenType::Ignored),
+            '\t' => Some(TokenType::Ignored),
+            '\n' => {
                 self.line += 1;
                 Some(TokenType::Ignored)
+            },
+            '"' => {
+                Some(TokenType::String)
             }
             _ => None,
         }
@@ -156,10 +175,10 @@ impl Scanner {
         return false;
     }
 
-    fn peek_next(&self) -> &str {
+    fn peek_next(&self) -> char {
         self.source
             .get(self.current as usize..(self.current + 1) as usize)
-            .unwrap()
+            .unwrap().chars().next().unwrap()
     }
 }
 
@@ -245,5 +264,12 @@ mod tests {
         let mut scanner = Scanner::new("() \n {}\n".to_string());
         let mut _tokens: &Vec<Token> = scanner.scan_tokens();
         assert_eq!(scanner.line, 3);
+    }
+
+    #[test]
+    fn test_string_literals() {
+        let mut scanner = Scanner::new("\"afd\"".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens.len(), 2);
     }
 }

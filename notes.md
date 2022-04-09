@@ -112,3 +112,12 @@ Added scanner for `/` and `//`
 - Handle whitespace characters
 
 Coming upp - [String Literals](http://www.craftinginterpreters.com/scanning.html#string-literals)
+
+## 2022-04-08 21:00:42
+
+- String literal handling - done.
+
+Todo:
+- `scan_tokens` is messy now
+    - The issue is sometimes we have to return crate::error message. Fix the return type.
+- Add MORE tests for String literals.
