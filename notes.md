@@ -130,3 +130,5 @@ Todo:
 - Whats the fuzz with returning &str in `get_last_string_char`
 
 Coming up - [Number literal](http://www.craftinginterpreters.com/scanning.html#number-literals)
+
+Femo fix test
