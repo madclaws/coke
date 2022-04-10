@@ -121,3 +121,12 @@ Todo:
 - `scan_tokens` is messy now
     - The issue is sometimes we have to return crate::error message. Fix the return type.
 - Add MORE tests for String literals.
+
+## 2022-04-09 21:23:38
+
+- Refactored scanner
+- Tests for string literal.
+
+- Whats the fuzz with returning &str in `get_last_string_char`
+
+Coming up - http://www.craftinginterpreters.com/scanning.html#number-literals
