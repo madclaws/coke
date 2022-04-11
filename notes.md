@@ -136,3 +136,27 @@ Femo fix test
 ## 2022-04-11 10:31:53
 
 - Tests for Strings.
+
+## 2022-04-12 01:56:48
+
+Ownership
+- The main point of using ownrship is to handle memory allocation in heap and using stack and heap efficiently.
+
+- Operations on Heap are costly, ownership helps us to manage these efficiently.
+
+- Rust wants to focus more on operating on slack than Heap.
+
+- `move` protects us from double-freeing the memory in heap
+    - Since when out of scope, `drop` is called. rust makes sure that `drop` is
+    called for a memory once.
+
+- During an assignment/function call, either of 2 things can happen, `copy`/`move`.
+    copy - if value is in stack
+    move - if in heap
+
+- For deep copy (copying the heap instead of stack pts) use `clone`.
+    cloning large data is less performant.
+
+- `When a variable that includes data on the heap goes out of scope, the value will be cleaned up by drop unless ownership of the data has been moved to another variable.`
+Moving to another variable can be via return too.
+
