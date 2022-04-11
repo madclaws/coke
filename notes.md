@@ -132,3 +132,7 @@ Todo:
 Coming up - [Number literal](http://www.craftinginterpreters.com/scanning.html#number-literals)
 
 Femo fix test
+
+## 2022-04-11 10:31:53
+
+- Tests for Strings.

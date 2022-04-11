@@ -268,5 +268,9 @@ mod tests {
         let mut scanner = Scanner::new("\"afd".to_string());
         let tokens: &Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
+
+        let mut scanner = Scanner::new("(){}\"afd\"".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens.len(), 6);
     }
 }
