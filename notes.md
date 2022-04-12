@@ -160,3 +160,5 @@ Ownership
 - `When a variable that includes data on the heap goes out of scope, the value will be cleaned up by drop unless ownership of the data has been moved to another variable.`
 Moving to another variable can be via return too.
 
+## 2022-04-12 18:29:03
+

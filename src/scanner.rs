@@ -173,6 +173,14 @@ impl Scanner {
             .unwrap()
             .to_string()
     }
+
+    fn is_digit(digit: char) -> bool {
+        if digit >= '0' && digit <= '9' {
+            true
+        } else {
+            false
+        }
+    }
 }
 
 #[cfg(test)]
