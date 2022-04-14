@@ -48,3 +48,10 @@ pub enum TokenType {
     // Special token for comment
     Comment,
 }
+
+#[derive(Debug, PartialEq)]
+#[allow(dead_code)]
+pub enum Literal {
+    Strings(String),
+    Numbers(f64),
+}

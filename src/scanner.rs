@@ -35,17 +35,17 @@ impl Scanner {
             self.scan_token();
         }
 
-        // Its null for literal in below EOF token in book.
+        // Its None for literal in below EOF token in book.
         self.tokens.push(Token::new(
             TokenType::Eof,
             String::from(""),
-            String::from(""),
+            None,
             self.line,
         ));
         &mut self.tokens
     }
 
-    fn add_token(&mut self, token_type: TokenType, literal: &str) {
+    fn add_token(&mut self, token_type: TokenType, literal: Option<Literal>) {
         let lexeme = self
             .source
             .get(self.start as usize..self.current as usize)
@@ -53,7 +53,7 @@ impl Scanner {
         self.tokens.push(Token::new(
             token_type,
             lexeme.to_string(),
-            literal.to_string(),
+            literal,
             self.line,
         ));
     }
@@ -71,51 +71,51 @@ impl Scanner {
         let source_char = self.get_current_char();
         self.current += 1;
         match source_char {
-            '(' => self.add_token(TokenType::LeftParen, ""),
-            ')' => self.add_token(TokenType::RightParen, ""),
-            '{' => self.add_token(TokenType::LeftBrace, ""),
-            '}' => self.add_token(TokenType::RightBrace, ""),
-            ',' => self.add_token(TokenType::Comma, ""),
-            '.' => self.add_token(TokenType::Dot, ""),
-            ';' => self.add_token(TokenType::SemiColon, ""),
-            '-' => self.add_token(TokenType::Minus, ""),
-            '+' => self.add_token(TokenType::Plus, ""),
-            '*' => self.add_token(TokenType::Star, ""),
+            '(' => self.add_token(TokenType::LeftParen, None),
+            ')' => self.add_token(TokenType::RightParen, None),
+            '{' => self.add_token(TokenType::LeftBrace, None),
+            '}' => self.add_token(TokenType::RightBrace, None),
+            ',' => self.add_token(TokenType::Comma, None),
+            '.' => self.add_token(TokenType::Dot, None),
+            ';' => self.add_token(TokenType::SemiColon, None),
+            '-' => self.add_token(TokenType::Minus, None),
+            '+' => self.add_token(TokenType::Plus, None),
+            '*' => self.add_token(TokenType::Star, None),
             '!' => {
                 if self.is_next('=') {
-                    self.add_token(TokenType::BangEqual, "")
+                    self.add_token(TokenType::BangEqual, None)
                 } else {
-                    self.add_token(TokenType::Bang, "")
+                    self.add_token(TokenType::Bang, None)
                 }
             }
             '=' => {
                 if self.is_next('=') {
-                    self.add_token(TokenType::EqualEqual, "")
+                    self.add_token(TokenType::EqualEqual, None)
                 } else {
-                    self.add_token(TokenType::Equal, "")
+                    self.add_token(TokenType::Equal, None)
                 }
             }
             '>' => {
                 if self.is_next('=') {
-                    self.add_token(TokenType::GreaterEqual, "")
+                    self.add_token(TokenType::GreaterEqual, None)
                 } else {
-                    self.add_token(TokenType::Greater, "")
+                    self.add_token(TokenType::Greater, None)
                 }
             }
             '<' => {
                 if self.is_next('=') {
-                    self.add_token(TokenType::LessEqual, "")
+                    self.add_token(TokenType::LessEqual, None)
                 } else {
-                    self.add_token(TokenType::Less, "")
+                    self.add_token(TokenType::Less, None)
                 }
             }
             '/' => {
                 if self.is_next('/') {
-                    while !self.is_at_end() && self.peek_next() != '\n' {
+                    while !self.is_at_end() && self.peek_next(0) != '\n' {
                         self.current += 1;
                     }
                 } else {
-                    self.add_token(TokenType::Slash, "")
+                    self.add_token(TokenType::Slash, None)
                 }
             }
             ' ' => {}
@@ -125,8 +125,8 @@ impl Scanner {
                 self.line += 1;
             }
             '"' => {
-                while !self.is_at_end() && self.peek_next() != '"' {
-                    if self.peek_next() != '\n' {
+                while !self.is_at_end() && self.peek_next(0) != '"' {
+                    if self.peek_next(0) != '\n' {
                         self.line += 1;
                     }
                     self.current += 1;
@@ -137,9 +137,13 @@ impl Scanner {
                 }
                 // consuming the last closing string
                 self.current += 1;
-                self.add_token(TokenType::String, &self.get_last_string_char())
+                self.add_token(TokenType::String, Some(Literal::Strings(self.get_last_string_char())))
             }
-            _ => crate::error(self.line as i32, "Unexpcted character."),
+            src_char => if self.is_digit(src_char) {
+                self.number();
+            } else {
+                crate::error(self.line as i32, "Unexpcted character.")
+            }
         }
     }
 
@@ -158,9 +162,12 @@ impl Scanner {
         return false;
     }
 
-    fn peek_next(&mut self) -> char {
+    /// peek the next character, without consuming.
+    /// step - which charater to peek from the current one.
+    /// Default should be 0, so it peeks the next
+    fn peek_next(&self, step: u32) -> char {
         self.source
-            .get(self.current as usize..(self.current + 1) as usize)
+            .get((self.current + step) as usize..((self.current + step) + 1) as usize)
             .unwrap()
             .chars()
             .next()
@@ -174,13 +181,32 @@ impl Scanner {
             .to_string()
     }
 
-    fn is_digit(digit: char) -> bool {
+    fn is_digit(&self, digit: char) -> bool {
         if digit >= '0' && digit <= '9' {
             true
         } else {
             false
         }
     }
+
+    fn number(&mut self) {
+        // consume all the adjacent numbers
+        while self.is_digit(self.peek_next(0)) {
+            self.current += 1;
+        }
+        if self.peek_next(0) == '.' && self.is_digit(self.peek_next(1)) {
+            self.current += 1;
+            while self.is_digit(self.peek_next(0)) {
+                self.current += 1;
+            }
+        }
+        let number_in_string =  self.source
+        .get((self.start) as usize..self.current as usize)
+        .unwrap();
+
+        let number_in_f64 = number_in_string.parse::<f64>().unwrap();
+        self.add_token(TokenType::Number, Some(Literal::Numbers(number_in_f64)));
+    } 
 }
 
 #[cfg(test)]

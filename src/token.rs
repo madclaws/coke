@@ -6,13 +6,13 @@ use crate::token_type::*;
 pub struct Token {
     pub token_type: TokenType,
     pub lexeme: String,
-    literal: String, // We will change the datatype to different latet
+    literal: Option<Literal>,
     line: u32,
 }
 
 impl Token {
     #[allow(dead_code)]
-    pub fn new(token_type: TokenType, lexeme: String, literal: String, line: u32) -> Token {
+    pub fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: u32) -> Token {
         Token {
             token_type,
             lexeme,
@@ -24,6 +24,6 @@ impl Token {
     /// Token information in a source file in String
     #[allow(dead_code)]
     pub fn to_string(&self) -> String {
-        format!("{:?} {} {}", self.token_type, self.lexeme, self.literal)
+        format!("{:?} {} {:?}", self.token_type, self.lexeme, self.literal)
     }
 }
