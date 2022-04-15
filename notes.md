@@ -166,3 +166,9 @@ Moving to another variable can be via return too.
 - implemented scanner for numbers.
 
 Coming up - Test cases for numbers
+
+## 2022-04-15 14:22:46
+
+- Added tests for Number literals.
+
+Coming up - **Reserved words and identifiers**

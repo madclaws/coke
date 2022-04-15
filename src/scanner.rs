@@ -191,19 +191,19 @@ impl Scanner {
 
     fn number(&mut self) {
         // consume all the adjacent numbers
-        while self.is_digit(self.peek_next(0)) {
+        while !self.is_at_end() && self.is_digit(self.peek_next(0)) {
             self.current += 1;
         }
-        if self.peek_next(0) == '.' && self.is_digit(self.peek_next(1)) {
+        if !self.is_at_end() && self.peek_next(0) == '.' && self.is_digit(self.peek_next(1)) {
             self.current += 1;
-            while self.is_digit(self.peek_next(0)) {
+            while !self.is_at_end() && self.is_digit(self.peek_next(0)) {
                 self.current += 1;
             }
         }
         let number_in_string =  self.source
         .get((self.start) as usize..self.current as usize)
         .unwrap();
-
+        println!("number in string {}", number_in_string);
         let number_in_f64 = number_in_string.parse::<f64>().unwrap();
         self.add_token(TokenType::Number, Some(Literal::Numbers(number_in_f64)));
     } 
@@ -213,6 +213,7 @@ impl Scanner {
 mod tests {
     use super::Scanner;
     use crate::token::*;
+    use crate::token_type::*;
 
     #[test]
     fn create_new_scanner() {
@@ -306,5 +307,27 @@ mod tests {
         let mut scanner = Scanner::new("(){}\"afd\"".to_string());
         let tokens: &Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 6);
+    }
+
+    #[test]
+    fn test_number_literals() {
+        let mut scanner = Scanner::new("2".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens[0].lexeme, "2".to_string());
+        assert_eq!(tokens[0].literal, Some(Literal::Numbers(2.0)));
+        assert_eq!(tokens.len(), 2);
+
+        let mut scanner = Scanner::new("2.56".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens[0].lexeme, "2.56".to_string());
+        assert_eq!(tokens[0].literal, Some(Literal::Numbers(2.56)));
+        assert_eq!(tokens.len(), 2);
+    }
+
+    #[test]
+    fn test_invalid_numbers() {
+        let mut scanner = Scanner::new("2.56.2".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens.len(), 4);
     }
 }
