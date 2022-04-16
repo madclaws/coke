@@ -5,7 +5,9 @@ use std::sync::Mutex;
 use std::{env, fs, io, process};
 
 mod scanner;
+use scanner::*;
 mod token;
+use token::*;
 mod token_type;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
@@ -35,9 +37,10 @@ fn run_from_file(file_name: &str) {
 fn run_prompt() {
     let mut buffer = String::new();
     let stdin = io::stdin();
-    println!("Interactive Coke 0.1.0");
+    println!("Interactive Coke (0.1.0)");
     loop {
         print!("icoke> ");
+
         io::stdout().flush().unwrap();
         match stdin.read_line(&mut buffer) {
             Ok(_source) => {
@@ -45,6 +48,7 @@ fn run_prompt() {
                     break;
                 }
                 run(String::from(buffer.trim_end()));
+                buffer = String::from("");
                 *HAD_ERROR_MUTEX.lock().unwrap() = false;
             }
             Err(error) => println!("Error due to {error:?}"),
@@ -52,10 +56,12 @@ fn run_prompt() {
     }
 }
 
-fn run(_coke_source: String) {
-    // Give the source to scanner module's scan function
-    // It returns a list of Tokens
-    // We will print the tokens
+fn run(source: String) {
+    let mut scanner: Scanner = Scanner::new(source);
+    let tokens: &mut Vec<Token> = scanner.scan_tokens();
+    for token in tokens {
+        println!("{token:?}");
+    }
     if *HAD_ERROR_MUTEX.lock().unwrap() {
         process::exit(exitcode::DATAERR);
     }

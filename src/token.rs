@@ -12,7 +12,12 @@ pub struct Token {
 
 impl Token {
     #[allow(dead_code)]
-    pub fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: u32) -> Token {
+    pub fn new(
+        token_type: TokenType,
+        lexeme: String,
+        literal: Option<Literal>,
+        line: u32,
+    ) -> Token {
         Token {
             token_type,
             lexeme,

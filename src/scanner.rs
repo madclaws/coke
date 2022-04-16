@@ -26,7 +26,7 @@ impl Scanner {
     pub fn scan_tokens(&mut self) -> &mut Vec<Token> {
         self.current = 0; // current index of lexeme
         self.line = 1;
-        println!("SOURCE\n{}", self.source);
+        // println!("SOURCE\n{}", self.source);
         while !self.is_at_end() {
             // Scan a single token
             // start and current is used for taking the lexeme out of source (substring from the source with start and length maybe)
@@ -126,7 +126,7 @@ impl Scanner {
             }
             '"' => {
                 while !self.is_at_end() && self.peek_next(0) != '"' {
-                    if self.peek_next(0) != '\n' {
+                    if self.peek_next(0) == '\n' {
                         self.line += 1;
                     }
                     self.current += 1;
@@ -137,14 +137,22 @@ impl Scanner {
                 }
                 // consuming the last closing string
                 self.current += 1;
-                self.add_token(TokenType::String, Some(Literal::Strings(self.get_last_string_char())))
+                self.add_token(
+                    TokenType::String,
+                    Some(Literal::Strings(self.get_last_string_char())),
+                )
             }
-            src_char => if self.is_digit(src_char) {
-                self.number();
-            } else if self.is_alpha(src_char) {
-                self.identifier();
-            } else {
-                crate::error(self.line as i32, "Unexpcted character.")
+            src_char => {
+                if self.is_digit(src_char) {
+                    self.number();
+                } else if self.is_alpha(src_char) {
+                    self.identifier();
+                } else {
+                    crate::error(
+                        self.line as i32,
+                        &format!("Unexpected character {}", src_char),
+                    );
+                }
             }
         }
     }
@@ -202,22 +210,21 @@ impl Scanner {
                 self.current += 1;
             }
         }
-        let number_in_string =  self.source
-        .get((self.start) as usize..self.current as usize)
-        .unwrap();
-        println!("number in string {}", number_in_string);
+        let number_in_string = self
+            .source
+            .get((self.start) as usize..self.current as usize)
+            .unwrap();
+        // println!("number in string {}", number_in_string);
         let number_in_f64 = number_in_string.parse::<f64>().unwrap();
         self.add_token(TokenType::Number, Some(Literal::Numbers(number_in_f64)));
-    } 
+    }
 
     fn is_alpha(&self, ch: char) -> bool {
-        if ch >= 'a' && ch <= 'z' || 
-            ch >= 'A' && ch <= 'Z' ||
-            ch == '_' {
-                true
-            } else {
-                false
-            }
+        if ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_' {
+            true
+        } else {
+            false
+        }
     }
 
     fn identifier(&mut self) {
@@ -225,11 +232,11 @@ impl Scanner {
             self.current += 1;
         }
         let lexeme = self
-        .source
-        .get(self.start as usize..self.current as usize)
-        .unwrap();
+            .source
+            .get(self.start as usize..self.current as usize)
+            .unwrap();
         if let Some(token_type) = self.get_keyword(lexeme) {
-            self.add_token(token_type, None)            
+            self.add_token(token_type, None)
         } else {
             self.add_token(TokenType::Identifier, None)
         }
@@ -257,7 +264,7 @@ impl Scanner {
             "true" => Some(TokenType::True),
             "let" => Some(TokenType::Let),
             "while" => Some(TokenType::While),
-            _ => None
+            _ => None,
         }
     }
 }
@@ -386,7 +393,7 @@ mod tests {
 
     #[test]
     fn test_identifiers_and_keywords() {
-        let mut scanner = Scanner::new("let order = 3\nif (3 or 5) {print(\"yo\")}".to_string());
+        let mut scanner = Scanner::new("let order = 3 \n if (3 or 5) {print(\"yo\")}".to_string());
         let tokens: &Vec<Token> = scanner.scan_tokens();
         println!("{tokens:?}");
         assert_eq!(tokens[0].token_type, TokenType::Let);

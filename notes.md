@@ -178,4 +178,10 @@ Coming up - **Reserved words and identifiers**
 - maximal munch - If a gramatical rule can be used against a keyword and identifier, then we should consume the maximum possible to decide whether it is keyword / identifier.
 
 - Coming up - Testng of keywords and identifiers & footnotes
-            
+
+## 2022-04-17 03:12:04
+
+- Tests cases added for keywords and identifiers.
+- Bug fixes.
+
+Next: Adding Block comments `/* */`
