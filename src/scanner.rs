@@ -383,4 +383,13 @@ mod tests {
         let tokens: &Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 4);
     }
+
+    #[test]
+    fn test_identifiers_and_keywords() {
+        let mut scanner = Scanner::new("let order = 3\nif (3 or 5) {print(\"yo\")}".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        println!("{tokens:?}");
+        assert_eq!(tokens[0].token_type, TokenType::Let);
+        assert_eq!(tokens.len(), 17);
+    }
 }

@@ -177,5 +177,5 @@ Coming up - **Reserved words and identifiers**
 
 - maximal munch - If a gramatical rule can be used against a keyword and identifier, then we should consume the maximum possible to decide whether it is keyword / identifier.
 
-- Coming up - Testng of keywords and keywords & footnotes
+- Coming up - Testng of keywords and identifiers & footnotes
             
