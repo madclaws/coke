@@ -172,3 +172,10 @@ Coming up - Test cases for numbers
 - Added tests for Number literals.
 
 Coming up - **Reserved words and identifiers**
+
+## 2022-04-16 16:37:48
+
+- maximal munch - If a gramatical rule can be used against a keyword and identifier, then we should consume the maximum possible to decide whether it is keyword / identifier.
+
+- Coming up - Testng of keywords and keywords & footnotes
+            

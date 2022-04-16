@@ -141,6 +141,8 @@ impl Scanner {
             }
             src_char => if self.is_digit(src_char) {
                 self.number();
+            } else if self.is_alpha(src_char) {
+                self.identifier();
             } else {
                 crate::error(self.line as i32, "Unexpcted character.")
             }
@@ -207,6 +209,57 @@ impl Scanner {
         let number_in_f64 = number_in_string.parse::<f64>().unwrap();
         self.add_token(TokenType::Number, Some(Literal::Numbers(number_in_f64)));
     } 
+
+    fn is_alpha(&self, ch: char) -> bool {
+        if ch >= 'a' && ch <= 'z' || 
+            ch >= 'A' && ch <= 'Z' ||
+            ch == '_' {
+                true
+            } else {
+                false
+            }
+    }
+
+    fn identifier(&mut self) {
+        while !self.is_at_end() && self.is_alphanumeric(self.peek_next(0)) {
+            self.current += 1;
+        }
+        let lexeme = self
+        .source
+        .get(self.start as usize..self.current as usize)
+        .unwrap();
+        if let Some(token_type) = self.get_keyword(lexeme) {
+            self.add_token(token_type, None)            
+        } else {
+            self.add_token(TokenType::Identifier, None)
+        }
+    }
+
+    fn is_alphanumeric(&self, ch: char) -> bool {
+        self.is_alpha(ch) || self.is_digit(ch)
+    }
+
+    fn get_keyword(&self, lexeme: &str) -> Option<TokenType> {
+        match lexeme {
+            "and" => Some(TokenType::And),
+            "class" => Some(TokenType::Class),
+            "else" => Some(TokenType::Else),
+            "false" => Some(TokenType::False),
+            "for" => Some(TokenType::For),
+            "def" => Some(TokenType::Function),
+            "if" => Some(TokenType::If),
+            "nil" => Some(TokenType::Nil),
+            "or" => Some(TokenType::Or),
+            "print" => Some(TokenType::Print),
+            "return" => Some(TokenType::Return),
+            "super" => Some(TokenType::Super),
+            "this" => Some(TokenType::This),
+            "true" => Some(TokenType::True),
+            "let" => Some(TokenType::Let),
+            "while" => Some(TokenType::While),
+            _ => None
+        }
+    }
 }
 
 #[cfg(test)]

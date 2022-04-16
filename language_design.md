@@ -5,3 +5,8 @@ Coke language will be heavily inspired by the lox language in the `crafting inte
 But we will change something here and there as we suit. After all its our freaking language.
 
 A very small example will be, insteading of using `var` to declare a variable, we use `let`
+
+Differences from Lox,
+
+- `let` is used for variable declaration
+- `def` is used for function definition
