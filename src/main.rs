@@ -1,8 +1,8 @@
 use once_cell::sync::Lazy;
+use std::cmp::Ordering;
 use std::io::Write;
 use std::sync::Mutex;
 use std::{env, fs, io, process};
-use std::cmp::Ordering;
 
 mod scanner;
 use scanner::*;
@@ -17,15 +17,15 @@ fn main() {
     match args.len().cmp(&2) {
         Ordering::Greater => {
             println!("Usage: Coke [script]");
-            process::exit(exitcode::USAGE);    
+            process::exit(exitcode::USAGE);
         }
         Ordering::Equal => {
             // run from the source file
-            run_from_file(&args[0]);    
+            run_from_file(&args[0]);
         }
         _ => {
             // Enter the interpreter prompt
-            run_prompt();    
+            run_prompt();
         }
     }
 }

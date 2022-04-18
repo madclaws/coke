@@ -115,17 +115,26 @@ impl Scanner {
                         self.current += 1;
                     }
                 } else if self.is_next('*') {
-                    while self.peek_next(0).is_some()
-                        && self.peek_next(0).unwrap() != '*'
-                        && self.peek_next(1).is_some()
-                        && self.peek_next(1).unwrap() != '/'
-                    {
-                        if self.peek_next(0).unwrap() == '\n' {
-                            self.line += 1;
+                    loop {
+                        if self.peek_next(0).is_some()
+                            && self.peek_next(0).unwrap() == '*'
+                            && self.peek_next(1).is_some()
+                            && self.peek_next(1).unwrap() == '/'
+                        {
+                            self.current += 2;
+                            break;
+                        } else if let Some(ch) = self.peek_next(0) {
+                            if ch == '\n' {
+                                self.line += 1;
+                            }
+                            self.current += 1;
                         }
-                        self.current += 1;
+
+                        if self.is_at_end() {
+                            println!("block comment end of line");
+                            break;
+                        }
                     }
-                    self.current += 2;
                 } else {
                     self.add_token(TokenType::Slash, None)
                 }
@@ -423,5 +432,27 @@ mod tests {
         let tokens: &Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens[0].get_meta().3, 2);
         assert_eq!(tokens.len(), 1);
+
+        let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 /*/".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        // println!("{tokens:?}");
+        // assert_eq!(tokens[0].get_meta().3, 2);
+        assert_eq!(tokens.len(), 1);
+
+        // Handling infinite loop
+        let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 /".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        // println!("{tokens:?}");
+        // assert_eq!(tokens[0].get_meta().3, 2);
+        assert_eq!(tokens.len(), 1);
+
+        // Handling infinite loop
+        let mut scanner = Scanner::new("/*".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        println!("{tokens:?}");
+        // assert_eq!(tokens[0].get_meta().3, 2);
+        assert_eq!(tokens.len(), 1);
     }
+
+    // cargo test test_block_comments -- --nocapture
 }
