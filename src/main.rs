@@ -1,4 +1,3 @@
-use exitcode;
 use once_cell::sync::Lazy;
 use std::io::Write;
 use std::sync::Mutex;
@@ -15,7 +14,7 @@ static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() > 2 {
-        print!("Usage: Coke [script]\n");
+        println!("Usage: Coke [script]");
         process::exit(exitcode::USAGE);
     } else if args.len() == 2 {
         // run from the source file

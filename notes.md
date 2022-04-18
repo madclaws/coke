@@ -185,3 +185,16 @@ Coming up - **Reserved words and identifiers**
 - Bug fixes.
 
 Next: Adding Block comments `/* */`
+
+## 2022-04-18 02:01:39
+
+- The lexical grammars of Python and Haskell are not regular. What does that mean, and why aren’t they?
+
+    - Regular in the sense, i guess those that can be expressed by regular expressions.
+    - So there might be some grammar rule that can't be expressed with regular expressions.
+    - multiple derivations for a grammar?
+    - context-free grammar. Grammars that use memory (for context)
+    - https://en.wikipedia.org/wiki/Context-free_grammar
+    - https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
+
+## 2022-04-19 00:19:18

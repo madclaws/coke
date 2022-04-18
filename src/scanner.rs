@@ -111,9 +111,21 @@ impl Scanner {
             }
             '/' => {
                 if self.is_next('/') {
-                    while !self.is_at_end() && self.peek_next(0) != '\n' {
+                    while self.peek_next(0).is_some() && self.peek_next(0).unwrap() != '\n' {
                         self.current += 1;
                     }
+                } else if self.is_next('*') {
+                    while self.peek_next(0).is_some()
+                        && self.peek_next(0).unwrap() != '*'
+                        && self.peek_next(1).is_some()
+                        && self.peek_next(1).unwrap() != '/'
+                    {
+                        if self.peek_next(0).unwrap() == '\n' {
+                            self.line += 1;
+                        }
+                        self.current += 1;
+                    }
+                    self.current += 2;
                 } else {
                     self.add_token(TokenType::Slash, None)
                 }
@@ -125,8 +137,8 @@ impl Scanner {
                 self.line += 1;
             }
             '"' => {
-                while !self.is_at_end() && self.peek_next(0) != '"' {
-                    if self.peek_next(0) == '\n' {
+                while self.peek_next(0).is_some() && self.peek_next(0).unwrap() != '"' {
+                    if self.peek_next(0).unwrap() == '\n' {
                         self.line += 1;
                     }
                     self.current += 1;
@@ -175,13 +187,19 @@ impl Scanner {
     /// peek the next character, without consuming.
     /// step - which charater to peek from the current one.
     /// Default should be 0, so it peeks the next
-    fn peek_next(&self, step: u32) -> char {
-        self.source
-            .get((self.current + step) as usize..((self.current + step) + 1) as usize)
-            .unwrap()
-            .chars()
-            .next()
-            .unwrap()
+    fn peek_next(&self, step: u32) -> Option<char> {
+        if self.current + step < self.source.len() as u32 {
+            Some(
+                self.source
+                    .get((self.current + step) as usize..((self.current + step) + 1) as usize)
+                    .unwrap()
+                    .chars()
+                    .next()
+                    .unwrap(),
+            )
+        } else {
+            None
+        }
     }
 
     fn get_last_string_char(&self) -> String {
@@ -201,12 +219,16 @@ impl Scanner {
 
     fn number(&mut self) {
         // consume all the adjacent numbers
-        while !self.is_at_end() && self.is_digit(self.peek_next(0)) {
+        while self.peek_next(0).is_some() && self.is_digit(self.peek_next(0).unwrap()) {
             self.current += 1;
         }
-        if !self.is_at_end() && self.peek_next(0) == '.' && self.is_digit(self.peek_next(1)) {
+        if self.peek_next(0).is_some()
+            && self.peek_next(0).unwrap() == '.'
+            && self.peek_next(1).is_some()
+            && self.is_digit(self.peek_next(1).unwrap())
+        {
             self.current += 1;
-            while !self.is_at_end() && self.is_digit(self.peek_next(0)) {
+            while self.peek_next(0).is_some() && self.is_digit(self.peek_next(0).unwrap()) {
                 self.current += 1;
             }
         }
@@ -228,7 +250,7 @@ impl Scanner {
     }
 
     fn identifier(&mut self) {
-        while !self.is_at_end() && self.is_alphanumeric(self.peek_next(0)) {
+        while self.peek_next(0).is_some() && self.is_alphanumeric(self.peek_next(0).unwrap()) {
             self.current += 1;
         }
         let lexeme = self
@@ -395,8 +417,19 @@ mod tests {
     fn test_identifiers_and_keywords() {
         let mut scanner = Scanner::new("let order = 3 \n if (3 or 5) {print(\"yo\")}".to_string());
         let tokens: &Vec<Token> = scanner.scan_tokens();
-        println!("{tokens:?}");
         assert_eq!(tokens[0].token_type, TokenType::Let);
         assert_eq!(tokens.len(), 17);
+    }
+
+    #[test]
+    fn test_block_comments() {
+        let mut scanner = Scanner::new("/* let a = 3 */".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens.len(), 1);
+
+        let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 */".to_string());
+        let tokens: &Vec<Token> = scanner.scan_tokens();
+        assert_eq!(tokens[0].get_meta().3, 2);
+        assert_eq!(tokens.len(), 1);
     }
 }

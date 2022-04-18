@@ -31,4 +31,9 @@ impl Token {
     pub fn to_string(&self) -> String {
         format!("{:?} {} {:?}", self.token_type, self.lexeme, self.literal)
     }
+
+    #[allow(dead_code)]
+    pub fn get_meta(&self) -> (&TokenType, String, &Option<Literal>, u32) {
+        (&self.token_type, self.lexeme.to_string(), &self.literal, self.line)
+    }
 }
