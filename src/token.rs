@@ -26,11 +26,6 @@ impl Token {
         }
     }
 
-    /// Token information in a source file in String
-    #[allow(dead_code)]
-    pub fn to_string(&self) -> String {
-        format!("{:?} {} {:?}", self.token_type, self.lexeme, self.literal)
-    }
 
     #[allow(dead_code)]
     pub fn get_meta(&self) -> (&TokenType, String, &Option<Literal>, u32) {

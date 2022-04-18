@@ -181,7 +181,7 @@ impl Scanner {
             }
             return false;
         }
-        return false;
+        false
     }
 
     /// peek the next character, without consuming.
@@ -210,11 +210,7 @@ impl Scanner {
     }
 
     fn is_digit(&self, digit: char) -> bool {
-        if digit >= '0' && digit <= '9' {
-            true
-        } else {
-            false
-        }
+        ('0'..='9').contains(&digit)
     }
 
     fn number(&mut self) {
@@ -242,11 +238,7 @@ impl Scanner {
     }
 
     fn is_alpha(&self, ch: char) -> bool {
-        if ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_' {
-            true
-        } else {
-            false
-        }
+        ('a'..='z').contains(&ch) || ('A'..='Z').contains(&ch) || ch == '_'
     }
 
     fn identifier(&mut self) {

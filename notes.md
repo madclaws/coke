@@ -198,3 +198,8 @@ Next: Adding Block comments `/* */`
     - https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
 
 ## 2022-04-19 00:19:18
+
+- Added block comments.
+- Clippy fixes
+
+Next: `Representing Code`
