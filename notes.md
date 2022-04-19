@@ -203,3 +203,20 @@ Next: Adding Block comments `/* */`
 - Clippy fixes
 
 Next: `Representing Code`
+
+## 2022-04-19 11:43:50
+
+- Representing code as a tree in an order of syntactic grammar
+- Regualar grammar can't represent nested syntax, as it requires a memory stack, which finite automaton
+    isn't.
+- There are 2 types of grammars - Lexical grammar & syntactic grammar.
+- lexical grammar
+    - each alphbaet is `character`
+    - formed strings are lexemes
+    - implemented by scanner
+- syntactic grammar
+    - each alphabet is `token`
+    - formed strings are `expressions`
+    - implemented by parser.
+
+- formal languages make sure that the generated strings from the alphabets are valid or not.
