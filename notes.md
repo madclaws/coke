@@ -220,3 +220,22 @@ Next: `Representing Code`
     - implemented by parser.
 
 - formal languages make sure that the generated strings from the alphabets are valid or not.
+
+## 2022-04-21 01:01:26
+
+Rules for grammars
+
+- Strings are derived from certain rules, so its called `derivations`.
+- Rules are called `productions`, as they prodcuce string.
+- A productions has `head` and `body`
+- Both of them are symbols
+- Symbols are of 2 types
+    - terminal
+        - These are basically lexemes/tokens. 
+        - These don't expand again.
+    - non-terminal
+        - These are references to other productions or self-referencing.
+        - These expand.
+- Genrally we use `Backus-Naur` form to represent grammar.
+
+Next - Enhancing our notation
