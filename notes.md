@@ -239,3 +239,14 @@ Rules for grammars
 - Genrally we use `Backus-Naur` form to represent grammar.
 
 Next - Enhancing our notation
+
+## 2022-04-22 02:07:32
+
+We can add more symbols other than terminals & non-terminal like,
+- `|` (pipe) for enum like behaviour
+- `()` for grouping the symbols
+- `+`, so that previous symbol should appear once more
+- `*` - previous symbol can be repeated >= 0 times
+- `?` - previous symbol can appear 0 or 1
+
+Next - A Grammar for Lox expressions
