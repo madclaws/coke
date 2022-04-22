@@ -249,4 +249,16 @@ We can add more symbols other than terminals & non-terminal like,
 - `*` - previous symbol can be repeated >= 0 times
 - `?` - previous symbol can appear 0 or 1
 
-Next - A Grammar for Lox expressions
+Next - A Grammar for Coke expressions
+
+## 2022-04-23 01:36:19
+
+- We will implement a subset of grammar first, parse it and interpret it.
+- First version Grammars are
+    - Literals
+    - Binary operators
+    - Unary operators
+    - paranthesis.
+- lexems whose length can vary are expressed in CAPITAL in grammar, ex String, Number
+
+Next - Implementing Syntax Trees
