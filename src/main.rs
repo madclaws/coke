@@ -9,6 +9,7 @@ use scanner::*;
 mod token;
 use token::*;
 mod token_type;
+mod expr;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
