@@ -308,3 +308,5 @@ Next: Working with Trees
         - Each functions like `interpret` will implement all its cases for all the types.
         - So adding new funcitons are easy.
         - But adding a new type means  go to interpret and add a new case for new type. 
+
+Next: Visitor pattern
