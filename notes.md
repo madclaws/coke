@@ -295,3 +295,16 @@ operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
 Structures for expressions are done.
 
 Next: Working with Trees
+
+## 2022-04-26 23:46:58
+
+- The expression problem
+    - We have type and methods associated with it.
+    - These methods are getting called when the syntax tree get executed by interpreter
+    - ex: for`Binary` type, there will be a method `interpret`
+    - In object oreinted way, for each type class, we have to implement the methods.
+    - But if we want to add a new method, we have to go to all classes and add the implementation.
+    - In FP, its reverse:
+        - Each functions like `interpret` will implement all its cases for all the types.
+        - So adding new funcitons are easy.
+        - But adding a new type means  go to interpret and add a new case for new type. 
