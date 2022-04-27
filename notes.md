@@ -310,3 +310,12 @@ Next: Working with Trees
         - But adding a new type means  go to interpret and add a new case for new type. 
 
 Next: Visitor pattern
+
+## 2022-04-28 00:31:01
+
+- Visitor pattern
+    - From a OOP perspective,
+        - We add an interface visitor that will define functions, that take the  subclass objects.
+        - visitDog(Dog dog), where Dog, is the subclass.
+    - Then in each subclass, we add a function `accept`, which is overrided from the parent `animal`.
+    - `accept` takes a visitor obj, and inside `accept`, we call visitor.visitDog(this)
