@@ -319,3 +319,10 @@ Next: Visitor pattern
         - visitDog(Dog dog), where Dog, is the subclass.
     - Then in each subclass, we add a function `accept`, which is overrided from the parent `animal`.
     - `accept` takes a visitor obj, and inside `accept`, we call visitor.visitDog(this)
+
+## 2022-04-28 21:24:05
+
+- Visitor for expressions
+    - Defined Visitor trait.
+
+Next: Implement accept function in Expression structs
