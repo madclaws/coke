@@ -326,3 +326,9 @@ Next: Visitor pattern
     - Defined Visitor trait.
 
 Next: Implement accept function in Expression structs
+
+## 2022-04-30 00:13:01
+
+- Added accept fn in Expr struct.
+
+- Need to understand what we want to achieve / how to express the visitor pattern properly in Rust.

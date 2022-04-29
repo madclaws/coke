@@ -16,6 +16,11 @@ pub struct Expr {
     
 }
 
+impl Expr {
+    fn accept<T: Visitor<T>>(mut visitor: T) -> T {
+        visitor.visit_expr(Expr {})
+    }
+}
 pub struct Binary {
     left: Expr,
     operator: Token,
@@ -26,6 +31,7 @@ impl Binary {
     pub fn new(left: Expr, operator: Token, right: Expr) -> Binary {
         Binary{left, operator, right}
     }
+
 }
 
 pub struct Grouping {
