@@ -17,7 +17,7 @@ pub struct Expr {
 }
 
 impl Expr {
-    fn accept<T: Visitor<T>>(mut visitor: T) -> T {
+    fn accept<T: Visitor<T>>(&self, mut visitor: T) -> T {
         visitor.visit_expr(Expr {})
     }
 }
@@ -32,6 +32,10 @@ impl Binary {
         Binary{left, operator, right}
     }
 
+    pub fn accept<T: Visitor<T>>(self, mut visitor: T) -> T {
+        visitor.visit_binary(self)
+    }
+
 }
 
 pub struct Grouping {
@@ -41,6 +45,10 @@ pub struct Grouping {
 impl Grouping {
     pub fn new(expression: Expr) -> Grouping {
         Grouping{expression}
+    }
+
+    pub fn accept<T: Visitor<T>>(self, mut visitor: T) -> T {
+        visitor.visit_grouping(self)
     }
 }
 
@@ -53,6 +61,10 @@ impl Unary {
     pub fn new(operator: Token, right: Expr) -> Unary {
         Unary{operator, right}
     }
+
+    pub fn accept<T: Visitor<T>>(self, mut visitor: T) -> T {
+        visitor.visit_unary(self)
+    }
 }
 
 pub struct Literals {
@@ -62,6 +74,10 @@ pub struct Literals {
 impl Literals {
     pub fn new(value: Literal) -> Literals {
         Literals{value}
+    }
+
+    pub fn accept<T: Visitor<T>>(self, mut visitor: T) -> T {
+        visitor.visit_literal(self)
     }
 }
 

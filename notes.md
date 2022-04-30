@@ -332,3 +332,15 @@ Next: Implement accept function in Expression structs
 - Added accept fn in Expr struct.
 
 - Need to understand what we want to achieve / how to express the visitor pattern properly in Rust.
+
+## 2022-04-30 02:35:15
+
+- Refreshing up from syntax tree.
+    - Expressions are not homogeneous, they have different operands
+
+- OOP with Rust.
+    - An interface can be implemented with Trait Objects.
+    - functions defined inside a trait have first argument `self`
+
+- Visitor pattern - Add methods to different types/same type of class, without changing the classes
+
