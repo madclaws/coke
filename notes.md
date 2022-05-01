@@ -344,3 +344,6 @@ Next: Implement accept function in Expression structs
 
 - Visitor pattern - Add methods to different types/same type of class, without changing the classes
 
+
+## 2022-05-01 12:43:25
+
