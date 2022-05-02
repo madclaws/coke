@@ -8,9 +8,9 @@ mod scanner;
 use scanner::*;
 mod token;
 use token::*;
-mod token_type;
+mod ast_printer;
 mod expr;
-// mod ast_printer;
+mod token_type;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 

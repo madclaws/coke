@@ -347,3 +347,6 @@ Next: Implement accept function in Expression structs
 
 ## 2022-05-01 12:43:25
 
+- visitor function heads in AST printer
+
+Next: Complete the body of visit_* functions
