@@ -26,4 +26,19 @@ impl Visitor<String> for AstPrinter {
             }
         }
     }
+
+    fn paranthesize(&mut self, expr_name: &str, expressions: Vec<Box<dyn Expr>>) -> String {
+        let mut builder = String::from("");
+        builder.push_str("(");
+        builder.push_str(expr_name);
+        for expr in expressions {
+            builder.push_str(" ");
+            // builder.push_str()
+            match expr_name {
+                "group" => self.visit_grouping(expr)
+            }
+        }
+        builder.push_str(")");
+        builder
+    }
 }

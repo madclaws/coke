@@ -8,6 +8,7 @@ pub trait Visitor<T> {
     fn visit_grouping(&mut self, grouping: &Grouping) -> T;
     fn visit_unary(&mut self, unary: &Unary) -> T;
     fn visit_literal(&mut self, literal: &Literals) -> T;
+    fn paranthesize(&mut self, expr_name: &str, expressions: Vec<Box<dyn Expr>>) -> T;
 }
 
 #[allow(dead_code)]
