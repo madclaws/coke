@@ -350,3 +350,10 @@ Next: Implement accept function in Expression structs
 - visitor function heads in AST printer
 
 Next: Complete the body of visit_* functions
+
+## 2022-05-05 02:23:09
+
+- Removed the struct and OOPy implementation of visitor pattern,
+- Implemnting using a Expr enum, and all the expressions are its variant.
+
+Next: Implement the code interpreation in AstPrinter
