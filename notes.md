@@ -357,3 +357,6 @@ Next: Complete the body of visit_* functions
 - Implemnting using a Expr enum, and all the expressions are its variant.
 
 Next: Implement the code interpreation in AstPrinter
+
+## 2022-05-05 23:32:58
+
