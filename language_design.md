@@ -1,12 +1,12 @@
 # Coke language manual
 
-Coke language will be heavily inspired by the lox language in the `crafting interpreters`.
+**Cosmos Oriented Kernel English**
 
-But we will change something here and there as we suit. After all its our freaking language.
+Coke is a sci-fi oriented programming language, useful in writing sci-fi programs.
 
-A very small example will be, insteading of using `var` to declare a variable, we use `let`
+Initial low-level implementations coke  will be inspired by the lox language in the [crafting interpreters](https://craftinginterpreters.com/).
 
-Differences from Lox,
 
-- `let` is used for variable declaration
-- `def` is used for function definition
+
+
+
