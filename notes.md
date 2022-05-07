@@ -365,3 +365,7 @@ Next: Implement the code interpreation in AstPrinter
 - Added paranthesize fn + interpreter for all 4 expressions
 
 Next: Pretty print expressions
+
+## 2022-05-07 14:41:27
+
+- Writing tests for AstPrinter.

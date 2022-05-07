@@ -3,8 +3,9 @@
 use crate::token::*;
 use crate::token_type::*;
 
+#[derive(Debug, PartialEq)]
 pub enum Expr {
-    Binary(Token, Box<Expr>, Box<Expr>),
+    Binary(Box<Expr>, Token , Box<Expr>),
     Grouping(Box<Expr>),
     Lit(Option<Literal>),
     Unary(Token, Box<Expr>)
