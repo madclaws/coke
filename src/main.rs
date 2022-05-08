@@ -43,6 +43,7 @@ fn run_from_file(file_name: &str) {
 fn run_prompt() {
     let mut buffer = String::new();
     let stdin = io::stdin();
+    println!("Cosmos Oriented Kernel English 🚀");
     println!("Interactive Coke (0.1.0)");
     loop {
         print!("icoke> ");
@@ -50,10 +51,12 @@ fn run_prompt() {
         io::stdout().flush().unwrap();
         match stdin.read_line(&mut buffer) {
             Ok(_source) => {
-                if buffer.trim_end().is_empty() {
+                buffer = String::from(buffer.trim_end());
+                if buffer.is_empty() {
+                    println!("Live long and prosper 🖖");
                     break;
                 }
-                run(String::from(buffer.trim_end()));
+                run(buffer);
                 buffer = String::from("");
                 *HAD_ERROR_MUTEX.lock().unwrap() = false;
             }

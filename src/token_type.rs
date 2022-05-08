@@ -28,7 +28,7 @@ pub enum TokenType {
     Class,
     Else,
     False,
-    Function,
+    SubRoutine,
     For,
     If,
     Nil,

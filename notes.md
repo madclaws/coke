@@ -369,3 +369,15 @@ Next: Pretty print expressions
 ## 2022-05-07 14:41:27
 
 - Writing tests for AstPrinter.
+
+## 2022-05-08 15:49:00
+
+- Parsing expressions
+    - Ambiguity and parsing game.
+        - From a series of tokens, we have to figure out the grammar used for it
+            validate it.
+        - We can generate multiple syntax trees for same expression , with the given grammar and that is not good.
+        - Operators are left associative and assignment is right associative
+
+
+ NEXT: Precedence rules in Coke
