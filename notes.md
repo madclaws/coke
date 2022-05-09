@@ -381,3 +381,21 @@ Next: Pretty print expressions
 
 
  NEXT: Precedence rules in Coke
+
+ ## 2022-05-10 03:50:44
+
+ - Modified Grammar for handling precedence
+
+ ```
+ expression     → equality ;
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+unary          → ( "!" | "-" ) unary
+               | primary ;
+primary        → NUMBER | STRING | "true" | "false" | "nil"
+               | "(" expression ")" ;
+ ```
+
+ Next: Recursive descent parser
