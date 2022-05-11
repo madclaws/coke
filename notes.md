@@ -382,12 +382,12 @@ Next: Pretty print expressions
 
  NEXT: Precedence rules in Coke
 
- ## 2022-05-10 03:50:44
+## 2022-05-10 03:50:44
 
  - Modified Grammar for handling precedence
 
  ```
- expression     → equality ;
+expression    → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
@@ -399,3 +399,16 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
  ```
 
  Next: Recursive descent parser
+
+## 2022-05-11 22:06:46
+
+- Top down parser
+    - Starts from the root expression and ends at the leaves or terminals
+- Bottom-up parser
+    - Starts from the innermost expressions and end at the complete one.
+
+- In a top-down parser, we start from the lowest precedence expressions
+
+- The Parser class
+
+Next: Parser implementation continues
