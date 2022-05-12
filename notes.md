@@ -387,7 +387,7 @@ Next: Pretty print expressions
  - Modified Grammar for handling precedence
 
  ```
-expression    → equality ;
+expression     → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
@@ -412,3 +412,9 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 - The Parser class
 
 Next: Parser implementation continues
+
+## 2022-05-12 02:59:13
+
+- Parser takes a list of Tokens, where as scanner took list of source characters
+
+- isAtEnd, peek, previous
