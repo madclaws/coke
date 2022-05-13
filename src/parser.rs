@@ -28,4 +28,11 @@ impl Parser {
     fn previous(&self) -> Option<&Token> {
         self.tokens.get((self.current - 1) as usize)
     }
+
+    fn advance(&mut self) -> Option<&Token> {
+        if !self.is_at_end() {
+            self.current += 1;
+        }
+        self.previous()
+    }
 }
