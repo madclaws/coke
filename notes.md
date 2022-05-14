@@ -418,3 +418,9 @@ Next: Parser implementation continues
 - Parser takes a list of Tokens, where as scanner took list of source characters
 
 - isAtEnd, peek, previous
+
+## 2022-05-15 01:57:03
+
+- Each grammer rule become a method in a class
+- Equality function 
+- Borrow checker fucked..
