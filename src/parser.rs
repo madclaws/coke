@@ -15,12 +15,12 @@ impl Parser {
     }
 
     // expression -> equality;
-    fn expression(&self) -> Expr {
+    fn expression(&mut self) -> Expr {
         self.equality()
     }
 
     // equality -> comparison (("!=" | "==") comparison)
-    fn equality(&self) -> Expr {
+    fn equality(&mut self) -> Expr {
         let mut expr = self.comparison();
         while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
             let operator = self.previous().unwrap();
@@ -57,7 +57,7 @@ impl Parser {
         self.previous()
     }
 
-    fn match_token(&self, token_types: &[TokenType]) -> bool {
+    fn match_token(&mut self, token_types: &[TokenType]) -> bool {
         for token_type in token_types {
             if self.check(token_type) {
                 self.advance();

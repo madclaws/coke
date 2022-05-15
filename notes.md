@@ -424,3 +424,4 @@ Next: Parser implementation continues
 - Each grammer rule become a method in a class
 - Equality function 
 - Borrow checker fucked..
+- Lifetime fuck up, may be have to write Expr in struct than Enum
