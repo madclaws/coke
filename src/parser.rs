@@ -21,11 +21,12 @@ impl Parser {
 
     // equality -> comparison (("!=" | "==") comparison)
     fn equality(&mut self) -> Expr {
+        // unimplemented!()
         let mut expr = self.comparison();
         while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
             let operator = self.previous().unwrap();
             let right = self.comparison();
-            expr = Expr::Binary(Box::new(expr) , *operator, Box::new(right))
+            expr = Expr::Binary(Box::new(expr) , operator, Box::new(right))
         }
         expr
     }

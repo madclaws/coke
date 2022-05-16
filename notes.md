@@ -425,3 +425,6 @@ Next: Parser implementation continues
 - Equality function 
 - Borrow checker fucked..
 - Lifetime fuck up, may be have to write Expr in struct than Enum
+
+## 2022-05-17 01:35:01
+- Fix reference issue with Expr enum
