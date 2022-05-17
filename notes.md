@@ -428,3 +428,9 @@ Next: Parser implementation continues
 
 ## 2022-05-17 01:35:01
 - Fix reference issue with Expr enum
+
+## 2022-05-17 22:10:52
+- Recursive Descent Parser
+    - https://www.huy.rocks/everyday/05-08-2022-parsing-recursive-descent-parser
+    - Every non-terminal is a function
+    

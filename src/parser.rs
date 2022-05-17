@@ -15,23 +15,28 @@ impl Parser {
     }
 
     // expression -> equality;
-    fn expression(&mut self) -> Expr {
+    fn expression(&mut self) -> &Expr {
         self.equality()
     }
 
     // equality -> comparison (("!=" | "==") comparison)
-    fn equality(&mut self) -> Expr {
+    fn equality(&mut self) -> &Expr {
         // unimplemented!()
         let mut expr = self.comparison();
         while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
-            let operator = self.previous().unwrap();
-            let right = self.comparison();
-            expr = Expr::Binary(Box::new(expr) , operator, Box::new(right))
+            if !self.is_at_end() {
+                self.current += 1;
+                let operator = self.tokens.get((self.current) as usize).unwrap();
+                {
+                let right = self.comparison();
+                expr = &Expr::Binary(Box::new(expr) , operator, Box::new(right))
+                }
+            }   
         }
-        expr
+        expr 
     }
 
-    fn comparison(&self) -> Expr {
+    fn comparison(&self) -> &Expr {
         unimplemented!();
     }
 
@@ -47,21 +52,9 @@ impl Parser {
         }
     }
 
-    fn previous(&self) -> Option<&Token> {
-        self.tokens.get((self.current - 1) as usize)
-    }
-
-    fn advance(&mut self) -> Option<&Token> {
-        if !self.is_at_end() {
-            self.current += 1;
-        }
-        self.previous()
-    }
-
-    fn match_token(&mut self, token_types: &[TokenType]) -> bool {
+    fn match_token(&self, token_types: &[TokenType]) -> bool {
         for token_type in token_types {
             if self.check(token_type) {
-                self.advance();
                 return true
             }        
         }

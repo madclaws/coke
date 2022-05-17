@@ -5,7 +5,7 @@ use crate::token_type::*;
 
 #[derive(Debug, PartialEq)]
 pub enum Expr<'a> {
-    Binary(Box<Expr<'a>>, &'a Token , Box<Expr<'a>>),
+    Binary(Box<&'a Expr<'a>>, &'a Token , Box<&'a Expr<'a>>),
     Grouping(Box<Expr<'a>>),
     Lit(Option<Literal>),
     Unary(Token, Box<Expr<'a>>)
