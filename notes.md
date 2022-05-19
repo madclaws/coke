@@ -433,4 +433,5 @@ Next: Parser implementation continues
 - Recursive Descent Parser
     - https://www.huy.rocks/everyday/05-08-2022-parsing-recursive-descent-parser
     - Every non-terminal is a function
-    
+    - Added MTokenType and MToken
+    Next: Adding Parser
