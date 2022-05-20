@@ -435,3 +435,16 @@ Next: Parser implementation continues
     - Every non-terminal is a function
     - Added MTokenType and MToken
     Next: Adding Parser
+
+## 2022-05-20 12:07:58
+- Creating a custom error type
+    - The error type is basically enum.
+    - This custom type will be the error type of the Result of parser
+    - Valid result of parser will be a MoneyNode.
+        - A moneynode has Currency and amount
+
+        {
+            currency: "$",
+            amount: "123"
+        }
+    - Implementing Display for nice rendering of error
