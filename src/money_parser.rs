@@ -94,4 +94,34 @@ impl <'a>MParser<'a> {
             ParseError::UnExpectedToken(MTokenType::Number, token.token_type)
         )
     }
+
+    fn parse_currency(&mut self) -> ParseResult<Currency> {
+        let token = self.peek().unwrap();
+        if self.is_match(MTokenType::Currency) {
+            let currency = match token.lexeme {
+                "$" =>  Currency::USD,
+                "£" => Currency::EUR,
+                _ =>  Currency::GBP
+            };
+            self.advance();
+            return Ok(currency);
+        }
+        Err(
+            ParseError::UnExpectedToken(MTokenType::Currency, token.token_type)
+        )
+    }
+
+    fn parse_money(&mut self) -> ParseResult<MoneyNode> {
+        let currency = self.parse_currency()?;
+        let amount = self.parse_amount()?;
+        Ok(MoneyNode {
+            currency,
+            amount
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    
 }
