@@ -7,7 +7,7 @@
 use std::fmt;
 use std::fmt::Display;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum MTokenType {
     Currency,
     Number
@@ -80,5 +80,18 @@ impl <'a>MParser<'a> {
     // consume and inc the current pointer
     fn advance(&mut self) {
         self.current += 1;
+    }
+
+    fn parse_amount(&mut self) -> ParseResult<i32> {
+        // check if current token is a amount 
+        let token = self.peek().unwrap();
+        if self.is_match(MTokenType::Number) {
+            let result = token.lexeme.parse::<i32>().map_err(|_| ParseError::InvalidAmount);
+            self.advance();
+            return result;
+        }
+        return Err(
+            ParseError::UnExpectedToken(MTokenType::Number, token.token_type)
+        )
     }
 }
