@@ -24,17 +24,20 @@ impl <'a>MToken<'a> {
     }
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Currency {
     USD,
     GBP,
     EUR
 }
 
+#[derive(Debug, PartialEq)]
 pub struct MoneyNode {
     currency: Currency,
     amount: i32
 }
 
+#[derive(Debug, PartialEq)]
 pub enum ParseError {
     UnExpectedToken(MTokenType, MTokenType),
     InvalidAmount
@@ -100,8 +103,8 @@ impl <'a>MParser<'a> {
         if self.is_match(MTokenType::Currency) {
             let currency = match token.lexeme {
                 "$" =>  Currency::USD,
-                "£" => Currency::EUR,
-                _ =>  Currency::GBP
+                "€" =>  Currency::EUR,
+                _ => Currency::GBP,
             };
             self.advance();
             return Ok(currency);
@@ -123,5 +126,66 @@ impl <'a>MParser<'a> {
 
 #[cfg(test)]
 mod tests {
-    
+    use super::MToken;
+    use super::MTokenType;
+    use super::MParser;
+    use super::Currency;
+    use super::MoneyNode;
+    use super::ParseError;
+    #[test]
+    fn test_parse_usd() {
+        let tokens = vec![
+            MToken::new(MTokenType::Currency, "$"),
+            MToken::new(MTokenType::Number, "512")
+        ];
+        let mut parser = MParser::new(tokens);
+        assert_eq!(parser.parse_money(),
+        Ok(
+           MoneyNode {
+               currency: Currency::USD,
+               amount: 512
+           }
+        ))
+    }
+
+    #[test]
+    fn test_parse_eur() {
+        let tokens = vec![
+            MToken::new(MTokenType::Currency, "€"),
+            MToken::new(MTokenType::Number, "512")
+        ];
+        let mut parser = MParser::new(tokens);
+        assert_eq!(parser.parse_money(),
+        Ok(
+           MoneyNode {
+               currency: Currency::EUR,
+               amount: 512
+           }
+        ))
+    }
+
+    #[test]
+    fn test_parse_invalid_amount() {
+        let tokens = vec![
+            MToken::new(MTokenType::Currency, "$"),
+            MToken::new(MTokenType::Number, "512rr")
+        ];
+        let mut parser = MParser::new(tokens);
+        assert_eq!(parser.parse_money(),
+            Err(ParseError::InvalidAmount)
+        )
+    }
+
+    #[test]
+    fn test_parse_unexpected_token() {
+        let tokens = vec![
+            MToken::new(MTokenType::Number, "512"),
+            MToken::new(MTokenType::Currency, "512")
+        ];
+        let mut parser = MParser::new(tokens);
+        assert_eq!(parser.parse_money(),
+            Err(ParseError::UnExpectedToken(MTokenType::Currency, MTokenType::Number))
+        )
+    }
+
 }
