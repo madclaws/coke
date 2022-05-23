@@ -15,28 +15,27 @@ impl Parser {
     }
 
     // expression -> equality;
-    fn expression(&mut self) -> &Expr {
+    fn expression(&mut self) -> Expr {
         self.equality()
     }
 
     // equality -> comparison (("!=" | "==") comparison)
-    fn equality(&mut self) -> &Expr {
-        unimplemented!()
-        // let mut expr = self.comparison();
-        // while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
-        //     if !self.is_at_end() {
-        //         self.current += 1;
-        //         let operator = self.tokens.get((self.current) as usize).unwrap();
-        //         {
-        //         let right = self.comparison();
-        //         expr = &Expr::Binary(Box::new(expr) , operator, Box::new(right))
-        //         }
-        //     }   
-        // }
-        // expr 
+    fn equality(&mut self) -> Expr {
+        let mut expr = self.comparison();
+        while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
+            if !self.is_at_end() {
+                self.current += 1;
+                let operator = self.tokens.get((self.current) as usize).unwrap();
+                {
+                let right = self.comparison();
+                expr = Expr::Binary(Box::new(expr) , operator, Box::new(right))
+                }
+            }   
+        }
+        expr 
     }
 
-    fn comparison(&self) -> &Expr {
+    fn comparison(&self) -> Expr {
         unimplemented!();
     }
 

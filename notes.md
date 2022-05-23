@@ -448,3 +448,7 @@ Next: Parser implementation continues
             amount: "123"
         }
     - Implementing Display for nice rendering of error
+
+## 2022-05-23 23:15:07
+
+- Lifetime mess up
