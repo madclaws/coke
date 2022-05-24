@@ -26,16 +26,14 @@ impl Parser {
             if !self.is_at_end() {
                 self.current += 1;
                 let operator = self.tokens.get((self.current) as usize).unwrap();
-                {
                 let right = self.comparison();
                 expr = Expr::Binary(Box::new(expr) , operator, Box::new(right))
-                }
             }   
         }
-        expr 
+        Expr::Lit(Some(Literal::Numbers(1.0)))
     }
 
-    fn comparison(&self) -> Expr {
+    fn comparison(&mut self) -> Expr {
         unimplemented!();
     }
 
