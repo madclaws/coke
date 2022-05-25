@@ -454,3 +454,19 @@ Next: Parser implementation continues
 
 ## 2022-05-24 21:28:50
 - Needs a reread of parser part
+
+## 2022-05-25 22:06:08
+
+### Parsing expressions
+- Given a token, we map them to the terminals to figure out which rules could have generated it.
+- 6 / 3 - 1, multiple ASTs can be generated and some can be wrong too acc to rules.
+- binary operators are left associative.
+- assignments are right associative.
+- We will apply precedence like in C to the grammar
+    - ==, !=
+    - comparison,  > | < etc..
+    - Term, + | -
+    - Factor, / | *
+    - Unary, - ! - right associative
+
+
