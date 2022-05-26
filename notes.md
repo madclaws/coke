@@ -469,4 +469,18 @@ Next: Parser implementation continues
     - Factor, / | *
     - Unary, - ! - right associative
 
+- new grammar
 
+```
+expression -> equality
+equality -> comparison (("=" | "!=") comparison)*
+comparison -> term ((">" | "<" | ">=" | "<=") term)*
+term -> factor (("+" | "-") factor) *;
+factor -> unary (("/" | "*") unary) *; // for unlimited expressions
+unary -> ("!" | "-") unary | primary;
+primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
+```
+
+- Each prodcution should call itself and its higher precedence
+- We are not making left recursive parser.
+- If an expression contains 3 + 4
