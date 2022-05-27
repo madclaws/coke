@@ -484,3 +484,31 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 - Each prodcution should call itself and its higher precedence
 - We are not making left recursive parser.
 - If an expression contains 3 + 4
+
+## 2022-05-27 21:56:14
+
+- Recursive descent parsing
+    - They are top bottom parser, as they start from lower precedence, full expression
+        to the terminals
+
+- The parser class
+- equality
+    - comparison
+    - while loop for equality ops, 
+        if eqality ops, then we create a binary expression with right comparison too
+    
+    in an expression like this `a == b == c == d == e`
+    all this will be inside the while loop
+    expr = Binary(expr, operator, right)
+    previous binary operator will be the left expression in the next iteration.
+
+    - If no equality ops, then only `comparison` will get called.
+
+- Comparison is same as equality, baring the tokens
+- Same as above for term and factor.
+- For unary, its if ops is unary, then new Unary(), else call primary()
+- For primary, we just check the ifs and return a new Lit()
+- Next is syntax errors
+- But before that, we have reread and write the parser till here?
+- No, we can test the parser, without the error handling at first..
+- May the borrow checker be with me!!
