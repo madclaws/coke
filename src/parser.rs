@@ -1,75 +1,79 @@
 // /// Parser module
 
-// use crate::token::*;
-// use crate::token_type::*;
-// use crate::expr::*;
+use crate::expr::*;
+use crate::token::*;
+use crate::token_type::*;
 
-// pub struct Parser {
-//     tokens: Vec<Token>,
-//     current: u32
-// }
+pub struct Parser {
+    tokens: Vec<Token>,
+    current: u32,
+}
 
-// impl Parser {
-//     pub fn new(tokens: Vec<Token>) -> Self {
-//         Parser{tokens, current: 0}
-//     }
+impl Parser {
+    fn new(tokens: Vec<Token>) -> Self {
+        Parser { tokens, current: 0 }
+    }
 
-//     // expression -> equality;
-//     fn expression(&mut self) -> Expr {
-//         self.equality()
-//     }
+    // Are we at the end of token stream?
+    fn is_eof(&self) -> bool {
+        self.current >= self.tokens.len().try_into().unwrap()
+    }
 
-//     // equality -> comparison (("!=" | "==") comparison)
-//     fn equality(&mut self) -> Expr {
-//         let mut expr = self.comparison();
-//         while self.match_token(&vec![TokenType::Bang, TokenType::BangEqual]) {
-//             if !self.is_at_end() {
-//                 self.current += 1;
-//                 let operator = self.tokens.get((self.current) as usize).unwrap();
-//                 let right = self.comparison();
-//                 expr = Expr::Binary(Box::new(expr) , operator, Box::new(right))
-//             }   
-//         }
-//         Expr::Lit(Some(Literal::Numbers(1.0)))
-//     }
+    // Returns the current token
+    fn peek(&self) -> Option<&Token> {
+        self.tokens.get(self.current as usize)
+    }
 
-//     fn comparison(&mut self) -> Expr {
-//         unimplemented!();
-//     }
+    fn advance(&mut self) {
+        self.current += 1
+    }
 
-//     fn peek(&self) -> Option<&Token> {
-//         self.tokens.get(self.current as usize)
-//     }
+    fn is_match(&self, token_type: TokenType) -> bool {
+        !self.is_eof() && self.peek().unwrap().token_type == token_type
+    }
 
-//     fn is_at_end(&self) -> bool {
-//         if let Some(token_ref) = self.peek() {
-//             token_ref.token_type == TokenType::Eof
-//         } else {
-//             true
-//         }
-//     }
+    fn parse_expression(&self) -> Expr {
+        // expression -> equality
+        self.parse_equality()
+    }
 
-//     fn match_token(&self, token_types: &[TokenType]) -> bool {
-//         for token_type in token_types {
-//             if self.check(token_type) {
-//                 return true
-//             }        
-//         }
+    fn parse_equality(&self) -> Expr {
+        // equality -> comparison (("==" | "!=") comparison)*
+        self.parse_comparison();
 
-//         return false;
-//     }
+        unimplemented!()
+    }
 
-//     fn check(&self, token_type: &TokenType) -> bool {
-//         if let Some(token_ref) = self.peek() {
-//             if token_ref.token_type == *token_type {
-//                 true
-//             } else {
-//                 false
-//             }
-//         } else {
-//             false
-//         }
-//     }
+    fn parse_comparison(&self) -> Expr {
+        // comparison -> term ((">" | "<") term)*
+        self.parse_term();
+        unimplemented!();
+    }
 
+    fn parse_term(&self) -> Expr {
+        // term -> factor (("+", "-") factor)*
+        self.parse_factor();
+        unimplemented!();
+    }
 
-// }
+    fn parse_factor(&self) -> Expr {
+        // factor -> unary (("/" | "*") unary)*
+        self.parse_unary();
+        unimplemented!()
+    }
+
+    fn parse_unary(&self) -> Expr {
+        // unary -> ("-" | "!") unary | primary
+        self.parse_primary();
+        unimplemented!()
+    }
+
+    fn parse_primary(&self) -> Expr {
+        // if self.is_match(TokenType::Number) {
+            // let token = self.peek().unwrap();
+            // Expr::Lit(token.literal)
+        // }
+        unimplemented!()
+    }
+
+}

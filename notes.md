@@ -512,3 +512,6 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 - But before that, we have reread and write the parser till here?
 - No, we can test the parser, without the error handling at first..
 - May the borrow checker be with me!!
+
+## 2022-05-28 22:38:55
+

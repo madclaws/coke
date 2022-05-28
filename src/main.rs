@@ -10,9 +10,9 @@ mod token;
 use token::*;
 mod ast_printer;
 mod expr;
-mod token_type;
-mod parser;
 mod money_parser;
+mod parser;
+mod token_type;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
