@@ -515,3 +515,11 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 ## 2022-05-28 22:38:55
 
+### Crust of Rust: Smart Pointers and interior mutability
+
+- Interior mutability with Cells
+    - Shared mutable containers O.O, which is not possible by default in Rust as brrow checker wont allow.
+
+`use std::cell::Cell` - The saviour of COKE
+
+- Next: Syntax Errors, by handling the grouping expression

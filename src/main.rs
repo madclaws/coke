@@ -8,7 +8,7 @@ mod scanner;
 use scanner::*;
 mod token;
 use token::*;
-mod ast_printer;
+// mod ast_printer;
 mod expr;
 mod money_parser;
 mod parser;

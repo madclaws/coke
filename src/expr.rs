@@ -3,11 +3,11 @@ use crate::token::*;
 use crate::token_type::*;
 
 #[derive(Debug, PartialEq)]
-pub enum Expr {
-    Binary(Box<Expr>, Token, Box<Expr>),
-    Grouping(Box<Expr>),
-    Lit(Option<Literal>),
-    Unary(Token, Box<Expr>),
+pub enum Expr<'a> {
+    Binary(Box<Expr<'a>>, &'a Token, Box<Expr<'a>>),
+    // Grouping(Box<Expr>),
+    Lit(Option<&'a Literal>),
+    Unary(&'a Token, Box<Expr<'a>>),
 }
 
 pub trait Visitor<T> {
