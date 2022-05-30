@@ -522,4 +522,19 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 `use std::cell::Cell` - The saviour of COKE
 
+- [NEW] - Use `std::cell::Cell` for sharable mutable containers, with compile time safety
 - Next: Syntax Errors, by handling the grouping expression
+
+## 2022-05-30 09:12:36
+- [DONE] - Wrote a test to check if parser can create an AST for simple math expression `2 + 3`
+### Syntax errors
+
+- Compiler's job
+    - Convert the tokens to AST
+    - Neat error handling.
+- Error handling requirements of a parser
+    - Detect & report error
+    - Shouldn't crash or stuck
+    - Fast
+    - Reporting all the errors
+    - minimizing cascading errors- ie errors that happen due to parser confused due to first error.

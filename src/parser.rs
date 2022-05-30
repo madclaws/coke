@@ -10,6 +10,7 @@ pub struct Parser {
     current:  Cell<u32> ,
 }
 
+#[allow(dead_code)]
 impl Parser {
     fn new(tokens: Vec<Token>) -> Self {
         Parser { tokens, current: Cell::new(0) }
@@ -113,20 +114,19 @@ impl Parser {
     }
 
     fn parse_primary(&self) -> Expr {
-      if self.is_match(vec![TokenType::False]) {
-          return Expr::Lit(Some(&Literal::Booleans(false)))
-      }
-      if self.is_match(vec![TokenType::True]) {
-          return Expr::Lit(Some(&Literal::Booleans(true)))
-      }
-      if self.is_match(vec![TokenType::Nil]) {
-          return Expr::Lit(None)
-      }
-      if self.is_match(vec![TokenType::String, TokenType::Number]) {
-          let token: &Token = self.previous().unwrap();
-          return Expr::Lit(token.literal.as_ref())
-      }
-      unimplemented!()
+        if self.is_match(vec![TokenType::False]) {
+            return Expr::Lit(Some(&Literal::Booleans(false)))
+        }
+        if self.is_match(vec![TokenType::True]) {
+            return Expr::Lit(Some(&Literal::Booleans(true)))
+        }
+        if self.is_match(vec![TokenType::Nil]) {
+            return Expr::Lit(None)
+        }
+        self.is_match(vec![TokenType::String, TokenType::Number]);
+        let token: &Token = self.previous().unwrap();
+        return Expr::Lit(token.literal.as_ref())
+    //   }
     }
 
 }
@@ -145,5 +145,16 @@ mod tests {
         let parser = Parser::new(tokens);
         let final_expr = parser.parse_expression();
         println!("{final_expr:?}");
+    }
+
+    #[test]
+    fn test_parse_simple_math() {
+        let num_token_1 = Token::new(TokenType::Number, String::from("2"), Some(Literal::Numbers(2.0)), 1);
+        let num_token_2 = Token::new(TokenType::Number, String::from("3"), Some(Literal::Numbers(3.0)), 1);
+        let op_token = Token::new(TokenType::Plus, String::from("+"), None, 1);
+        let eof = Token::new(TokenType::Eof, String::from(""), None, 1);
+        let parser = Parser::new(vec![num_token_1, op_token, num_token_2, eof]);
+        let ast = parser.parse_expression();
+        println!("{ast:?}");
     }
 }

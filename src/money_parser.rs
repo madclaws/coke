@@ -17,6 +17,7 @@ pub struct MToken<'a> {
     lexeme: &'a str,
 }
 
+#[allow(dead_code)]
 impl<'a> MToken<'a> {
     pub fn new(token_type: MTokenType, lexeme: &'a str) -> Self {
         MToken { token_type, lexeme }
@@ -55,6 +56,7 @@ impl Display for ParseError {
     }
 }
 
+#[allow(dead_code)]
 type ParseResult<T> = Result<T, ParseError>;
 
 pub struct MParser<'a> {
@@ -62,6 +64,7 @@ pub struct MParser<'a> {
     current: u32,
 }
 
+#[allow(dead_code)]
 impl<'a> MParser<'a> {
     fn new(tokens: Vec<MToken<'a>>) -> Self {
         MParser { tokens, current: 0 }
