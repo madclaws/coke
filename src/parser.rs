@@ -4,10 +4,27 @@ use crate::expr::*;
 use crate::token::*;
 use crate::token_type::*;
 use std::cell::Cell;
+use std::fmt;
+// use std::fmt::Display;
+use std::fmt::Debug;
 
 pub struct Parser {
     tokens: Vec<Token>,
     current:  Cell<u32> ,
+}
+
+#[allow(dead_code)]
+type ParseResult<T> = Result<T, ParseError>;
+
+#[allow(dead_code)]
+pub enum ParseError {
+    UnExpectedToken(TokenType, TokenType)
+}
+
+impl Debug for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Unexpecred token")
+    }
 }
 
 #[allow(dead_code)]
@@ -54,79 +71,90 @@ impl Parser {
     }
 
 
-    fn parse_expression(&self) -> Expr {
+    fn parse_expression(&self) -> ParseResult<Expr>  {
         // expression -> equality
         self.parse_equality()
     }
 
-    fn parse_equality(&self) -> Expr {
+    fn parse_equality(&self) -> ParseResult<Expr>  {
         // equality -> comparison (("==" | "!=") comparison)*
-        let mut expr = self.parse_comparison();
+        let mut expr = self.parse_comparison()?;
         while self.is_match(vec![TokenType::Equal, TokenType::BangEqual]) {
             let operator: &Token = self.previous().unwrap();
-            let right: Expr = self.parse_comparison();
+            let right: Expr = self.parse_comparison()?;
             expr = Expr::Binary(Box::new(expr), operator, Box::new(right))
         }
-        expr
+        Ok(expr)
     }
 
-    fn parse_comparison(&self) -> Expr {
+    fn parse_comparison(&self) -> ParseResult<Expr> {
         // comparison -> term ((">" | "<") term)*
-        let mut expr = self.parse_term();
+        let mut expr = self.parse_term()?;
         while self.is_match(vec![TokenType::Greater, TokenType::GreaterEqual, TokenType::Less, TokenType::LessEqual]) {
             let operator: &Token = self.previous().unwrap();
-            let right: Expr = self.parse_term();
+            let right: Expr = self.parse_term()?;
             expr = Expr::Binary(Box::new(expr), operator, Box::new(right))
         }
-        expr
+        Ok(expr)
     }
 
-    fn parse_term(&self) -> Expr {
+    fn parse_term(&self) -> ParseResult<Expr> {
         // term -> factor (("+", "-") factor)*
-        let mut expr = self.parse_factor();
+        let mut expr = self.parse_factor()?;
         while self.is_match(vec![TokenType::Plus, TokenType::Minus]) {
             let operator: &Token = self.previous().unwrap();
-            let right: Expr = self.parse_factor();
+            let right: Expr = self.parse_factor()?;
             expr = Expr::Binary(Box::new(expr), operator, Box::new(right))
         }
-        expr
+        Ok(expr)
     }
 
-    fn parse_factor(&self) -> Expr {
+    fn parse_factor(&self) -> ParseResult<Expr> {
         // factor -> unary (("/" | "*") unary)*
-        let mut expr = self.parse_unary();
+        let mut expr = self.parse_unary()?;
         while self.is_match(vec![TokenType::Slash, TokenType::Star]) {
             let operator: &Token = self.previous().unwrap();
-            let right: Expr = self.parse_unary();
+            let right: Expr = self.parse_unary()?;
             expr = Expr::Binary(Box::new(expr), operator, Box::new(right))
         }
-        expr
+        Ok(expr)
     }
 
-    fn parse_unary(&self) -> Expr {
+    fn parse_unary(&self) -> ParseResult<Expr>  {
         // unary -> ("-" | "!") unary | primary
         if self.is_match(vec![TokenType::Minus, TokenType::Bang]) {
             let operator: &Token = self.previous().unwrap();
-            let right: Expr = self.parse_unary();
-            return Expr::Unary(operator, Box::new(right))
+            let right: Expr = self.parse_unary()?;
+            return Ok(Expr::Unary(operator, Box::new(right)))
         }
         self.parse_primary()
     }
 
-    fn parse_primary(&self) -> Expr {
+    fn parse_primary(&self) -> ParseResult<Expr>  {
         if self.is_match(vec![TokenType::False]) {
-            return Expr::Lit(Some(&Literal::Booleans(false)))
+            return Ok(Expr::Lit(Some(&Literal::Booleans(false))))
         }
         if self.is_match(vec![TokenType::True]) {
-            return Expr::Lit(Some(&Literal::Booleans(true)))
+            return Ok(Expr::Lit(Some(&Literal::Booleans(true))))
         }
         if self.is_match(vec![TokenType::Nil]) {
-            return Expr::Lit(None)
+            return Ok(Expr::Lit(None))
         }
-        self.is_match(vec![TokenType::String, TokenType::Number]);
-        let token: &Token = self.previous().unwrap();
-        return Expr::Lit(token.literal.as_ref())
-    //   }
+        
+        if self.is_match(vec![TokenType::String, TokenType::Number]) {
+            let token: &Token = self.previous().unwrap();
+            return Ok(Expr::Lit(token.literal.as_ref()))
+        }
+        Err(ParseError::UnExpectedToken(TokenType::String, TokenType::Nil))
+    }
+
+    fn consume(&self, token_type: TokenType, message: String) -> Result<Option<&Token> , ParseError> {
+        if self.check(token_type) {
+            self.advance();
+            return Ok(self.previous())
+        }
+        Err(ParseError::UnExpectedToken(TokenType::String, TokenType::Nil))
+        // Err(ParseError::UnExpectedToken(token_type, self.peek().unwrap().token_type))
     }
 
 }

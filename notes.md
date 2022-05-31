@@ -538,3 +538,15 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
     - Fast
     - Reporting all the errors
     - minimizing cascading errors- ie errors that happen due to parser confused due to first error.
+
+- Panic mode recovery
+    - Parser enters panic mode, as soons as there is an error on one token.
+    - synchronization
+        - After panic mode, parser need to make the its state correct for the next token
+        - We make a syncronization point, which is from where parser can again start parsing.
+        - This means we discard all the token before it in the token stream
+        - Errors in the skipped tokens will not be examined by the parser
+        - This also means that we skip the cascade false error that could have happen too
+        - Parsers do the synchronization in statements, which we don't have yet, we only have basic expressions.
+
+- Added ParseResult type for handling parse error
