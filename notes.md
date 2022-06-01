@@ -550,3 +550,8 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
         - Parsers do the synchronization in statements, which we don't have yet, we only have basic expressions.
 
 - Added ParseResult type for handling parse error
+
+## 2022-06-01 22:30:21
+
+- Added errorv2 and refactor
+

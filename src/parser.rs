@@ -18,7 +18,7 @@ type ParseResult<T> = Result<T, ParseError>;
 
 #[allow(dead_code)]
 pub enum ParseError {
-    UnExpectedToken(TokenType, TokenType)
+    UnExpectedToken
 }
 
 impl Debug for ParseError {
@@ -145,7 +145,14 @@ impl Parser {
             let token: &Token = self.previous().unwrap();
             return Ok(Expr::Lit(token.literal.as_ref()))
         }
-        Err(ParseError::UnExpectedToken(TokenType::String, TokenType::Nil))
+
+        if self.is_match(vec![TokenType::LeftParen]) {
+            let expr = self.parse_expression()?;
+            let _consume = self.consume(TokenType::RightParen, "Expect ')' after expression.".to_owned());
+            return Ok(Expr::Grouping(Box::new(expr)));
+        }
+
+        Err(ParseError::UnExpectedToken)
     }
 
     fn consume(&self, token_type: TokenType, message: String) -> Result<Option<&Token> , ParseError> {
@@ -153,8 +160,9 @@ impl Parser {
             self.advance();
             return Ok(self.previous())
         }
-        Err(ParseError::UnExpectedToken(TokenType::String, TokenType::Nil))
-        // Err(ParseError::UnExpectedToken(token_type, self.peek().unwrap().token_type))
+
+        crate::errorv2(self.previous().unwrap(), &message);
+        Err(ParseError::UnExpectedToken)
     }
 
 }

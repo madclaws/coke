@@ -8,11 +8,12 @@ mod scanner;
 use scanner::*;
 mod token;
 use token::*;
+mod token_type;
+use token_type::*;
 // mod ast_printer;
 mod expr;
 mod money_parser;
 mod parser;
-mod token_type;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
@@ -87,4 +88,14 @@ fn report(line: i32, at: &str, message: &str) {
 #[allow(dead_code)]
 pub fn error(line: i32, message: &str) {
     report(line, "", message)
+}
+
+#[allow(dead_code)]
+pub fn errorv2(token: &Token, message: &str) {
+    if token.token_type == TokenType::Eof {
+        report(token.line as i32, " at end", message)
+    } else {
+        let err_msg = format!(" at '{}'", token.lexeme);
+        report(token.line as i32, &err_msg, message)
+    }
 }
