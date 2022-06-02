@@ -555,3 +555,7 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 - Added errorv2 and refactor
 
+## 2022-06-03 00:21:18
+
+- Error productions are nicer.
+- Added synchronize function

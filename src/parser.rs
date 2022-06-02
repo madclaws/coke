@@ -160,9 +160,29 @@ impl Parser {
             self.advance();
             return Ok(self.previous())
         }
-
         crate::errorv2(self.previous().unwrap(), &message);
         Err(ParseError::UnExpectedToken)
+    }
+
+    fn synchronize(&self) {
+        self.advance();
+        while !self.is_eof() {
+            if self.previous().unwrap().token_type == TokenType::SemiColon {
+                return
+            }
+
+            match self.peek().unwrap().token_type {
+                TokenType::Class => return,
+                TokenType::SubRoutine => return,
+                TokenType::Let => return,
+                TokenType::For => return,
+                TokenType::If => return,
+                TokenType::While => return,
+                TokenType::Print => return,
+                TokenType::Return => return,
+                _ => self.advance()
+            }
+        }
     }
 
 }
