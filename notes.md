@@ -559,3 +559,7 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 - Error productions are nicer.
 - Added synchronize function
+
+## 2022-06-03 20:50:32
+
+- Added ExpectExpression variant to the parseError

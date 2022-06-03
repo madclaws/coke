@@ -18,7 +18,8 @@ type ParseResult<T> = Result<T, ParseError>;
 
 #[allow(dead_code)]
 pub enum ParseError {
-    UnExpectedToken
+    UnExpectedToken,
+    ExpectExpression
 }
 
 impl Debug for ParseError {
@@ -152,7 +153,7 @@ impl Parser {
             return Ok(Expr::Grouping(Box::new(expr)));
         }
 
-        Err(ParseError::UnExpectedToken)
+        Err(ParseError::ExpectExpression)
     }
 
     fn consume(&self, token_type: TokenType, message: String) -> Result<Option<&Token> , ParseError> {
