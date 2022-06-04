@@ -23,7 +23,7 @@ impl Scanner {
         }
     }
 
-    pub fn scan_tokens(&mut self) -> &mut Vec<Token> {
+    pub fn scan_tokens(&mut self) -> Vec<Token> {
         self.current = 0; // current index of lexeme
         self.line = 1;
         // println!("SOURCE\n{}", self.source);
@@ -42,7 +42,7 @@ impl Scanner {
             None,
             self.line,
         ));
-        &mut self.tokens
+        self.tokens
     }
 
     fn add_token(&mut self, token_type: TokenType, literal: Option<Literal>) {
@@ -308,7 +308,7 @@ mod tests {
     #[test]
     fn test_scan_tokens() {
         let mut scanner = Scanner::new("()".to_string());
-        let tokens: &mut Vec<Token> = scanner.scan_tokens();
+        let mut tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 3);
         assert_eq!(tokens.pop().unwrap().lexeme, "".to_string());
         assert_eq!(tokens.pop().unwrap().lexeme, ")".to_string());
@@ -319,14 +319,14 @@ mod tests {
     #[test]
     fn test_scan_invalid_tokens() {
         let mut scanner = Scanner::new("#)".to_string());
-        let tokens: &mut Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 2);
     }
 
     #[test]
     fn test_operator_scan_tokens_1() {
         let mut scanner = Scanner::new("!".to_string());
-        let tokens: &mut Vec<Token> = scanner.scan_tokens();
+        let mut tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 2);
         assert_eq!(tokens.pop().unwrap().lexeme, "".to_string());
         assert_eq!(tokens.pop().unwrap().lexeme, "!".to_string());
@@ -336,72 +336,72 @@ mod tests {
     #[test]
     fn test_operator_scan_tokens_3() {
         let mut scanner = Scanner::new("!=".to_string());
-        let tokens: &mut Vec<Token> = scanner.scan_tokens();
+        let mut tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 2);
         assert_eq!(tokens.pop().unwrap().lexeme, "".to_string());
         assert_eq!(tokens.pop().unwrap().lexeme, "!=".to_string());
         assert_eq!(tokens.pop(), None);
 
         let mut scanner_2 = Scanner::new("! =".to_string());
-        let tokens_2: &Vec<Token> = scanner_2.scan_tokens();
+        let tokens_2: Vec<Token> = scanner_2.scan_tokens();
         assert_eq!(tokens_2.len(), 3);
     }
 
     #[test]
     fn test_longer_lexemes_1() {
         let mut scanner = Scanner::new("//".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("/".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 2);
 
         let mut scanner = Scanner::new("//yoyo".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("// this is a comment".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("(( )){} // grouping stuff".to_string());
-        let tokens: &mut Vec<Token> = scanner.scan_tokens();
+        let mut tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 7);
 
         assert_eq!(tokens.pop().unwrap().lexeme, "".to_string());
         assert_eq!(tokens.pop().unwrap().lexeme, "}".to_string());
 
         let mut scanner = Scanner::new("() \n {}\n".to_string());
-        let mut _tokens: &Vec<Token> = scanner.scan_tokens();
+        let mut _tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(scanner.line, 3);
     }
 
     #[test]
     fn test_string_literals() {
         let mut scanner = Scanner::new("\"afd\"".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 2);
 
         let mut scanner = Scanner::new("\"afd".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("(){}\"afd\"".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 6);
     }
 
     #[test]
     fn test_number_literals() {
         let mut scanner = Scanner::new("2".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens[0].lexeme, "2".to_string());
         assert_eq!(tokens[0].literal, Some(Literal::Numbers(2.0)));
         assert_eq!(tokens.len(), 2);
 
         let mut scanner = Scanner::new("2.56".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens[0].lexeme, "2.56".to_string());
         assert_eq!(tokens[0].literal, Some(Literal::Numbers(2.56)));
         assert_eq!(tokens.len(), 2);
@@ -410,14 +410,14 @@ mod tests {
     #[test]
     fn test_invalid_numbers() {
         let mut scanner = Scanner::new("2.56.2".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 4);
     }
 
     #[test]
     fn test_identifiers_and_keywords() {
         let mut scanner = Scanner::new("let order = 3 \n if (3 or 5) {print(\"yo\")}".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens[0].token_type, TokenType::Let);
         assert_eq!(tokens.len(), 17);
     }
@@ -425,30 +425,30 @@ mod tests {
     #[test]
     fn test_block_comments() {
         let mut scanner = Scanner::new("/* let a = 3 */".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 */".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         assert_eq!(tokens[0].get_meta().3, 2);
         assert_eq!(tokens.len(), 1);
 
         let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 /*/".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         // println!("{tokens:?}");
         // assert_eq!(tokens[0].get_meta().3, 2);
         assert_eq!(tokens.len(), 1);
 
         // Handling infinite loop
         let mut scanner = Scanner::new("/* let a = 3 \n let b = 5 /".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         // println!("{tokens:?}");
         // assert_eq!(tokens[0].get_meta().3, 2);
         assert_eq!(tokens.len(), 1);
 
         // Handling infinite loop
         let mut scanner = Scanner::new("/*".to_string());
-        let tokens: &Vec<Token> = scanner.scan_tokens();
+        let tokens: Vec<Token> = scanner.scan_tokens();
         println!("{tokens:?}");
         // assert_eq!(tokens[0].get_meta().3, 2);
         assert_eq!(tokens.len(), 1);

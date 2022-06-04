@@ -23,9 +23,10 @@ impl Visitor<String> for AstPrinter {
                 if literal.is_none() {
                     String::from("nil")
                 } else {
-                    match literal.as_ref().unwrap() {
+                    match literal.unwrap() {
                         Literal::Numbers(num) => num.to_string(),
                         Literal::Strings(string) => string.to_string(),
+                        Literal::Booleans(bools) => bools.to_string(),
                     }
                 }
             }
@@ -48,10 +49,10 @@ mod tests {
     #[test]
     fn creating_binary_expressions() {
         let add_token = Token::new(TokenType::Plus, String::from("+"), None, 0);
-        let num_1 = Box::new(Expr::Lit(Some(Literal::Numbers(2.3))));
-        let num_2 = Box::new(Expr::Lit(Some(Literal::Numbers(3.0))));
+        let num_1 = Box::new(Expr::Lit(Some(&Literal::Numbers(2.3))));
+        let num_2 = Box::new(Expr::Lit(Some(&Literal::Numbers(3.0))));
 
-        let add_expr = Expr::Binary(num_1, add_token, num_2);
+        let add_expr = Expr::Binary(num_1, &add_token, num_2);
 
         let mut ast_printer = AstPrinter {};
         let result = ast_printer.visit_expr(&add_expr);
@@ -61,10 +62,10 @@ mod tests {
     #[test]
     fn creating_group_expressions() {
         let add_token = Token::new(TokenType::Plus, String::from("+"), None, 0);
-        let num_1 = Box::new(Expr::Lit(Some(Literal::Numbers(2.0))));
-        let num_2 = Box::new(Expr::Lit(Some(Literal::Numbers(3.0))));
+        let num_1 = Box::new(Expr::Lit(Some(&Literal::Numbers(2.0))));
+        let num_2 = Box::new(Expr::Lit(Some(&Literal::Numbers(3.0))));
 
-        let add_expr = Box::new(Expr::Binary(num_1, add_token, num_2));
+        let add_expr = Box::new(Expr::Binary(num_1, &add_token, num_2));
         let grouping = Expr::Grouping(add_expr);
 
         let mut ast_printer = AstPrinter {};
@@ -75,9 +76,9 @@ mod tests {
     #[test]
     fn creating_unary_expressions() {
         let add_token = Token::new(TokenType::Plus, String::from("+"), None, 0);
-        let num_1 = Box::new(Expr::Lit(Some(Literal::Numbers(2.0))));
+        let num_1 = Box::new(Expr::Lit(Some(&Literal::Numbers(2.0))));
 
-        let unary = Expr::Unary(add_token, num_1);
+        let unary = Expr::Unary(&add_token, num_1);
 
         let mut ast_printer = AstPrinter {};
         let result = ast_printer.visit_expr(&unary);
@@ -89,16 +90,16 @@ mod tests {
         // (-123) * (45.67)
         //  -> (* (- 123) (group 45.67))
         let minus_token = Token::new(TokenType::Minus, String::from("-"), None, 0);
-        let num_1 = Box::new(Expr::Lit(Some(Literal::Numbers(123.0))));
+        let num_1 = Box::new(Expr::Lit(Some(&Literal::Numbers(123.0))));
 
-        let unary = Box::new(Expr::Unary(minus_token, num_1));
-        let grouped_number = Box::new(Expr::Grouping(Box::new(Expr::Lit(Some(Literal::Numbers(
+        let unary = Box::new(Expr::Unary(&minus_token, num_1));
+        let grouped_number = Box::new(Expr::Grouping(Box::new(Expr::Lit(Some(&Literal::Numbers(
             45.67,
         ))))));
 
         let star_token = Token::new(TokenType::Star, String::from("*"), None, 0);
 
-        let final_expression = Expr::Binary(unary, star_token, grouped_number);
+        let final_expression = Expr::Binary(unary, &star_token, grouped_number);
         let mut ast_printer = AstPrinter {};
         let result = ast_printer.visit_expr(&final_expression);
         println!("{result:?}");

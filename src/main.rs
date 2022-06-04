@@ -10,10 +10,12 @@ mod token;
 use token::*;
 mod token_type;
 use token_type::*;
-// mod ast_printer;
+mod ast_printer;
 mod expr;
 mod money_parser;
 mod parser;
+use parser::*;
+use expr::*;
 
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
@@ -70,10 +72,9 @@ fn run_prompt() {
 
 fn run(source: String) {
     let mut scanner: Scanner = Scanner::new(source);
-    let tokens: &mut Vec<Token> = scanner.scan_tokens();
-    for token in tokens {
-        println!("{token:?}");
-    }
+    let tokens: Vec<Token> = scanner.scan_tokens();
+    let parser = Parser::new(tokens);
+    let expression = parser.parse_expression();
     if *HAD_ERROR_MUTEX.lock().unwrap() {
         process::exit(exitcode::DATAERR);
     }

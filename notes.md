@@ -563,3 +563,8 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 ## 2022-06-03 20:50:32
 
 - Added ExpectExpression variant to the parseError
+
+## 2022-06-05 00:33:35
+
+- Added parser to main wip
+    - mutability return issue in scanner.rs

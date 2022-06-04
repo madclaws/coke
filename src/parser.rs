@@ -30,7 +30,7 @@ impl Debug for ParseError {
 
 #[allow(dead_code)]
 impl Parser {
-    fn new(tokens: Vec<Token>) -> Self {
+    pub fn new(tokens: Vec<Token>) -> Self {
         Parser { tokens, current: Cell::new(0) }
     }
 
@@ -72,7 +72,7 @@ impl Parser {
     }
 
 
-    fn parse_expression(&self) -> ParseResult<Expr>  {
+    pub fn parse_expression(&self) -> ParseResult<Expr>  {
         // expression -> equality
         self.parse_equality()
     }
