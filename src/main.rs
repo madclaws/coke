@@ -16,7 +16,7 @@ mod money_parser;
 mod parser;
 use parser::*;
 use expr::*;
-
+use ast_printer::*;
 static HAD_ERROR_MUTEX: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
 fn main() {
@@ -71,12 +71,20 @@ fn run_prompt() {
 }
 
 fn run(source: String) {
-    let mut scanner: Scanner = Scanner::new(source);
+    let scanner: Scanner = Scanner::new(source);
     let tokens: Vec<Token> = scanner.scan_tokens();
     let parser = Parser::new(tokens);
     let expression = parser.parse_expression();
-    if *HAD_ERROR_MUTEX.lock().unwrap() {
-        process::exit(exitcode::DATAERR);
+    // println!("{expression:?}");
+    if let Ok(expr) = expression {
+        // println!("{expr:?}");
+        let mut ast_printer = AstPrinter{};
+        let parse_result = ast_printer.visit_expr(&expr);
+        println!("{parse_result:?}");
+    } else {
+        if *HAD_ERROR_MUTEX.lock().unwrap() {
+            process::exit(exitcode::DATAERR);
+        }
     }
 }
 

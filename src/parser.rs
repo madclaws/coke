@@ -24,7 +24,7 @@ pub enum ParseError {
 
 impl Debug for ParseError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Unexpecred token")
+        write!(f, "Unexpected token")
     }
 }
 

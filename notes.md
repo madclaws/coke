@@ -568,3 +568,7 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 - Added parser to main wip
     - mutability return issue in scanner.rs
+
+## 2022-06-06 21:30:58
+- Finally mathematical simple parser is working.
+- [TODO] - Manage errors correctly.
