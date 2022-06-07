@@ -572,3 +572,5 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 ## 2022-06-06 21:30:58
 - Finally mathematical simple parser is working.
 - [TODO] - Manage errors correctly.
+    -[DONE] - Printing unexpected token error
+    - [TODO] - Need extensive error report

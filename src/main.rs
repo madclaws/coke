@@ -75,15 +75,17 @@ fn run(source: String) {
     let tokens: Vec<Token> = scanner.scan_tokens();
     let parser = Parser::new(tokens);
     let expression = parser.parse_expression();
-    // println!("{expression:?}");
-    if let Ok(expr) = expression {
-        // println!("{expr:?}");
-        let mut ast_printer = AstPrinter{};
-        let parse_result = ast_printer.visit_expr(&expr);
-        println!("{parse_result:?}");
-    } else {
-        if *HAD_ERROR_MUTEX.lock().unwrap() {
-            process::exit(exitcode::DATAERR);
+    match expression {
+        Ok(expr) => {
+            let mut ast_printer = AstPrinter{};
+            let parse_result = ast_printer.visit_expr(&expr);
+            println!("{parse_result:?}");
+        },
+        Err(err) => {
+            println!("Error parsing due to {:?}", err);
+            if *HAD_ERROR_MUTEX.lock().unwrap() {
+                process::exit(exitcode::DATAERR);
+            }
         }
     }
 }
