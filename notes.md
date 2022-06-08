@@ -574,3 +574,6 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 - [TODO] - Manage errors correctly.
     -[DONE] - Printing unexpected token error
     - [TODO] - Need extensive error report
+
+## 2022-06-08 22:17:15
+- [DONE] - Making a group expression , if only consume return is OK
