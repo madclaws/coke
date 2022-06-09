@@ -577,3 +577,7 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 
 ## 2022-06-08 22:17:15
 - [DONE] - Making a group expression , if only consume return is OK
+
+## 2022-06-09 22:42:10
+
+- [DONE] - Removed redundant error function

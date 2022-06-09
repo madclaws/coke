@@ -166,11 +166,6 @@ impl Parser {
         Err(ParseError::UnExpectedToken)
     }
 
-    fn error(&self, token: &Token, message: String) -> ParseError{
-        crate::errorv2(token, &message);
-        ParseError::UnExpectedToken
-    }
-
     fn synchronize(&self) {
         self.advance();
         while !self.is_eof() {
