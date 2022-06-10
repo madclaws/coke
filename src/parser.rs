@@ -149,11 +149,13 @@ impl Parser {
 
         if self.is_match(vec![TokenType::LeftParen]) {
             let expr = self.parse_expression()?;
-            if let Ok(_token) = self.consume(TokenType::RightParen, "Expect ')' after expression.".to_owned()) {
-                return Ok(Expr::Grouping(Box::new(expr)));
+            match self.consume(TokenType::RightParen, "Expect ')' after expression.".to_owned()) {
+                Ok(_token) => return Ok(Expr::Grouping(Box::new(expr))),
+                Err(err) => return Err(err)
             }
         }
 
+        crate::errorv2(self.peek().unwrap(), "Expect Expression");
         Err(ParseError::ExpectExpression)
     }
 

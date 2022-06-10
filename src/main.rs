@@ -81,8 +81,7 @@ fn run(source: String) {
             let parse_result = ast_printer.visit_expr(&expr);
             println!("{parse_result:?}");
         },
-        Err(err) => {
-            println!("Error parsing due to {:?}", err);
+        Err(_err) => {
             if *HAD_ERROR_MUTEX.lock().unwrap() {
                 process::exit(exitcode::DATAERR);
             }

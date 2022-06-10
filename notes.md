@@ -581,3 +581,9 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 ## 2022-06-09 22:42:10
 
 - [DONE] - Removed redundant error function
+
+## 2022-06-10 22:05:41
+
+- [DONE] - Why REPL is exiting on consume error
+    - Because we set HAD_ERROR_MUTEX to true in consume, which lead to the exit.
+
