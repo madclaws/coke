@@ -587,3 +587,27 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
 - [DONE] - Why REPL is exiting on consume error
     - Because we set HAD_ERROR_MUTEX to true in consume, which lead to the exit.
 
+- [TODO] - Grammar for ternary operator
+
+## 2022-06-10 22:43:59
+
+- Evaluating expressions
+    - We will be executing the syntax tree itself.s
+    - Use the same visitor pattern to compute the values
+    - Coke literal values are in the end Rust's types.
+    - Interpreter struct with Visitor trait
+    - The challenge is in Java all the coke values can be covered by `Object`
+
+- Evaluating literals
+- Evaluating Paranthesis
+    - evaluate the inner expression recursively.
+- Evaluating unary expression
+    - evaluate(right expression)
+    - right expression is casted according to the symbol.
+    - Interpreter is post-order-traversal.
+    - Check the truthy value
+- Truthiness and falness
+    - Dynamic langs partition the data into truthy and falsy.
+    - Coke follows, `false` and `nil` are falsy, rest everything truthy
+- Evaluating Binary operators
+    - evaluate expressions on the basis of operator type.
