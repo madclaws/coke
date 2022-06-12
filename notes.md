@@ -611,3 +611,4 @@ primary -> NUMBER | STRING | "nil" | "true" | "false" | "(" expression ")";
     - Coke follows, `false` and `nil` are falsy, rest everything truthy
 - Evaluating Binary operators
     - evaluate expressions on the basis of operator type.
+    - For `PLUS` we check the type for Number or string , for addition on concatenation
