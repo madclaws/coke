@@ -51,7 +51,7 @@ fn run_prompt() {
     println!("Cosmos Oriented Kernel English 🚀");
     println!("Interactive Coke (0.1.0)");
     loop {
-        print!("icoke> ");
+        print!("icoke 🏖️ > ");
 
         io::stdout().flush().unwrap();
         match stdin.read_line(&mut buffer) {
