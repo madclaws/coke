@@ -14,7 +14,19 @@ impl AstPrinter {
         builder.push_str(")");
         builder
     }
+
+    fn heirarchize(&mut self, expr_name: &str, expressions: Vec<&Expr>) -> String {
+        let mut builder = String::from("(");
+        builder.push_str(&expr_name);
+        for expr in expressions {
+            builder.push_str(" ");
+            builder.push_str(&self.visit_expr(expr));
+        }
+        builder.push_str(")");
+        builder
+    }
 }
+
 impl Visitor<String> for AstPrinter {
     fn visit_expr(&mut self, expr: &Expr) -> String {
         // We can implement code interpretation for each expression here.
@@ -31,10 +43,10 @@ impl Visitor<String> for AstPrinter {
                 }
             }
             Expr::Binary(left_expr, token, right_expr) => {
-                self.paranthesize(&token.lexeme, vec![left_expr, right_expr])
+                self.heirarchize(&token.lexeme, vec![left_expr, right_expr])
             }
-            Expr::Grouping(expr) => self.paranthesize("group", vec![expr]),
-            Expr::Unary(token, left_expr) => self.paranthesize(&token.lexeme, vec![left_expr]),
+            Expr::Grouping(expr) => self.heirarchize("group", vec![expr]),
+            Expr::Unary(token, left_expr) => self.heirarchize(&token.lexeme, vec![left_expr]),
         }
     }
 }
