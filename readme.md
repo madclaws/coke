@@ -2,4 +2,4 @@
 
 **Cosmos Oriented Kernel English**
 
-> A simple expression interpreter
+> A dynamic programming language and interpreter
